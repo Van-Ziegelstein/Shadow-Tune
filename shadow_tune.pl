@@ -42,7 +42,6 @@ sub asset_dump {
     my $op_params = $_[0];
     my $assets_content = $_[1];
     my $sound_meta_start = $_[2];
- 
     my @track_list;
     
     print "Parsing resources.assets...\n";
@@ -76,8 +75,8 @@ sub resS_dump {
 
     while ($resS_content =~ /$ogg_first_page/g) {
 
-	   print "Track ", ++$track_num, " offset: $-[0]\n" if $op_params->{verbose} == 1;
-           push(@offset_list, $-[0]);
+	  print "Track ", ++$track_num, " offset: $-[0]\n" if $op_params->{verbose} == 1;
+          push(@offset_list, $-[0]);
 
     }
 
@@ -95,7 +94,6 @@ sub asset_update {
    my $assets_file = $_[2];
  
    die "Number of replacement offsets does not match original track number.\n" unless @{$new_track_offsets} == @{$current_tracklist};  
-
    print "Remapping offset and size values in resources.assets...\n";
 
    push (@{$new_track_offsets}, $resS_end); 
@@ -184,7 +182,6 @@ sub music_restore {
    my $op_params = $_[0];
 
    $op_params->{sr_resources} = find_game_resources($op_params); 
- 
    $op_params->{new_resS_file} = "$op_params->{sr_resources}/resources.assets.resS.bak";
 
    die "No backup file found in $op_params->{sr_resources}\n" unless -s "$op_params->{new_resS_file}";
@@ -262,14 +259,16 @@ if ( @ARGV != 0) {
 
        if ($ARGV[0] =~ /--help/i) { help_dialogue; exit 0; }
 
-       elsif ($ARGV[0] =~ /-swap/i) { $operation = 1; 
+       elsif ($ARGV[0] =~ /-swap/i) { 
+                                      $operation = 1; 
                                       get_option();				    
                                       chomp($op_params{new_resS_file} = $ARGV[0]);
 				    }
 
        elsif ($ARGV[0] =~ /-restore/i) { $operation = 2; }
 
-       elsif ($ARGV[0] =~ /-i/i) { get_option();
+       elsif ($ARGV[0] =~ /-i/i) { 
+                                   get_option();
                                    chomp($ARGV[0]); 
 				   $ARGV[0] =~ s/\/$//;
 				   unshift(@{$op_params{install_dirs}}, $ARGV[0]); 
