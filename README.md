@@ -42,7 +42,7 @@ Most Linux and Unix flavors should come with one pre-installed. Windows users mi
 a try. (**Note: At this point, Windows portability of the script is not guaranteed! See below for further info.**)
 
 ## Installation
-Download the latest release from the Releases page or clone the repo. 
+Download the latest version from the [Release](https://github.com/Van-Ziegelstein/Shadow-Tune/releases) page or clone the repo. 
 Don't forget to make the script executable after extraction! 
 
 Only core modules were used, so no additional packages should have to be installed.
