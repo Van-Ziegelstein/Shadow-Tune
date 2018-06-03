@@ -81,6 +81,12 @@ the path.)
 
 Obtain more verbose output.
 
+## Screenshots
+
+| Parsing resources.assets of Shadowrun Returns | Parsing a new resources.assets.resS file | Updating resources.assets of Shadowrun Hong Kong |
+| --- | --- | --- |
+| <img src="screenshots/shadow_tune1.png" width="250" height="400"/> | <img src="screenshots/shadow_tune2.png" width="250" height="400"/> | <img src="screenshots/shadow_tune3.png" width="250" height="400"/>
+
 ## Limitations
 - The script provides no way of accessing and/or modifying individual music tracks, the only available operation
 is bulk replacement of everything. This is because even the replacement of only a single track would boil down to
@@ -93,7 +99,6 @@ the entrails of a Windows environment but as of now portability is not guarantee
 
 ## Authors
 **Van Ziegelstein** - Creator and Maintainer 
-
 
 ## Acknowledgments
 *Shadow-Tune* wouldn't exist without the mod *CalFree in Chains* and its creator. He laid the groundwork for this project by 
