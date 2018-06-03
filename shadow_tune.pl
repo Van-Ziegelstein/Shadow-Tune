@@ -225,23 +225,13 @@ sub get_option {
 
 sub help_dialogue {
  
- print "\nThis is a small tool for modders/users who wish to tinker with the sound files of Harebrained Schemes' Shadowrun games.\n",
-       "Its main purpose is to automate the replacement of the vanilla soundtrack.\n",
-       "The script can execute two kinds of operations:\n\n",
-       "---Swap---\n",
-       "Replace the existing resources.assets.resS file with a new one and update the metadata in resources.assets. The format of the command is:\n",
+ print "-Swap music files:\n",
        "$0 -swap <path-to-new-resources.assets.reS-file> [-e returns|dragonfall|hongkong ] [-i <path-to-shadowrun-install-folder>] [-v]\n",
-       "The file provided via the -swap option should be the new resources.assets.reS file containing the music tracks (in ogg vorbis format) that the user wishes to use.\n",
+       "The file provided via the -swap option should be the new resources.assets.reS file containing the music tracks (in ogg vorbis format).\n",
        "Before replacing the original, the script will make a backup copy of the resources.assets.reS file that can later be used for the restore operation.\n\n",
-       "---Restore---\n",
-       "Revert back to the state prior to the sound modification. The format of the command is:\n",
+       "-Restore original music:\n",
        "$0 -restore [-e returns|dragonfall|hongkong ] [-i <path-to-shadowrun-install-folder>] [-v]\n",
        "This operation will fail if the script can't locate the backup copy mentioned above.\n\n",
-       "The -e option can be used to specify the Shadowrun game to operate on. If omitted, the script will assume that its operations are to be caried out on the files of Shadowrun Returns.\n\n",
-       "Regardless which operation is chosen, the script will try to locate the directory where the specified Shadowrun game is installed. (By default the directory of Shadowrun Returns.)\n",
-       "In case this process fails, there's the optional -i commandline parameter, which lets you manually set the path. Note that this should just be the path to the root directory of the Shadowrun Game that is to be modified.\n\n",
-       "More verbose output can be obtained via the -v parameter.\n\n",
-       "And of course --help prints this stuff.\n\n";
 }
 
 
