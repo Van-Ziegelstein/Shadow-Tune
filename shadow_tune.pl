@@ -76,7 +76,7 @@ sub resS_dump {
     my $track_num = 0;
     my @offset_list;
 
-    print "Parsing resources.assets.reS replacment file...\n";
+    print "Parsing resources.assets.resS replacment file...\n";
     print "\n" if $op_params->{verbose} == 1;
 
     while ($resS_content =~ /$ogg_first_page/g) {
@@ -165,7 +165,7 @@ sub music_replace {
 
    my $op_params = $_[0];
    
-   die "You must give a valid path to a new resources.assets.reS file.\n" 
+   die "You must give a valid path to a new resources.assets.resS file.\n" 
    unless $op_params->{new_resS_file} 
    && -s glob(qq/"$op_params->{new_resS_file}"/);
  
@@ -226,9 +226,9 @@ sub get_option {
 sub help_dialogue {
  
  print "-Swap music files:\n",
-       "$0 -swap <path-to-new-resources.assets.reS-file> [-e returns|dragonfall|hongkong ] [-i <path-to-shadowrun-install-folder>] [-v]\n",
-       "The file provided via the -swap option should be the new resources.assets.reS file containing the music tracks (in ogg vorbis format).\n",
-       "Before replacing the original, the script will make a backup copy of the resources.assets.reS file that can later be used for the restore operation.\n\n",
+       "$0 -swap <path-to-new-resources.assets.resS-file> [-e returns|dragonfall|hongkong ] [-i <path-to-shadowrun-install-folder>] [-v]\n",
+       "The file provided via the -swap option should be the new resources.assets.resS file containing the music tracks (in ogg vorbis format).\n",
+       "Before replacing the original, the script will make a backup copy of the resources.assets.resS file that can later be used for the restore operation.\n\n",
        "-Restore original music:\n",
        "$0 -restore [-e returns|dragonfall|hongkong ] [-i <path-to-shadowrun-install-folder>] [-v]\n",
        "This operation will fail if the script can't locate the backup copy mentioned above.\n\n",

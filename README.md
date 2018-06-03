@@ -43,7 +43,7 @@ The script can execute two kinds of operations:
 #### -swap
 Swap out the existing soundtrack with a new one. The format of the command is:
 
-`shadow_tune.pl -swap <new-resources.assets.reS> [ <options> ]` 
+`shadow_tune.pl -swap <new-resources.assets.resS> [ <options> ]` 
 
 Where `new-resources.assets.resS` is the path to a new resources.assets.resS file.
 Before replacing the original, the script will make a backup copy that can later be used for the restore operation.
