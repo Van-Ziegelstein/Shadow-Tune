@@ -98,3 +98,6 @@ the entrails of a Windows environment but as of now portability is not guarantee
 ## Acknowledgments
 *Shadow-Tune* wouldn't exist without the mod *CalFree in Chains* and its creator. He laid the groundwork for this project by 
 discovering how the sound files are linked together and formulating the steps required to swap out the soundtrack.
+
+## License
+This project is licensed under the [MIT License](LICENSE).
