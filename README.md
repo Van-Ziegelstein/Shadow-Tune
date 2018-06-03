@@ -1,6 +1,16 @@
 # Shadow-Tune
 Perl script to swap out the soundtrack of Harebrained Scheme's Shadowrun games with custom music. 
 
+[Prerequisites](#prerequisites)
+
+[Installation](#installation)
+
+[Usage](#usage)
+
+[Screenshots](#screenshots)
+
+[Limitations](#limitations)
+
 ## What is this exactly?
 At its core, *Shadow-Tune* is a tool to manipulate the music resource files of the three
 Shadowrun Games released by Harebrained Schemes:
@@ -19,7 +29,7 @@ up to the user to provide a properly formatted `resources.assets.resS` file.
 
 ## Why does this exist?
 Shadow-Tune 1.0 was originally developed as part of the effort to bring the Shadowrun Hong Kong Mod *CalFree in Chains*
-(which every self-respecting Shadowrunner should play if he/she/it hasn't already.) to Linux platforms. The mod came with its
+(which every self-respecting Shadowrunner should play if he/she/it hasn't already) to Linux platforms. The mod came with its
 own soundtrack and a Linux-specific solution was needed to properly apply it and restore vanilla behavior once finished with the campaign.
 
 Shadow-Tune 2.0 is the extended version of the original, capable of applying the same replacement operation to Shadowrun Returns
