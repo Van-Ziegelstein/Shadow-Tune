@@ -65,7 +65,8 @@ Revert back to the state prior to the sound modification. The format of the comm
 
 This operation will fail if the script can't locate the backup copy mentioned above.
 
-Both operations take the following options:
+#### Options:
+Both operations can be supplemented with the following options:
 
 `-e [ returns|dragonfall|hongkong| ]`
 
@@ -75,10 +76,9 @@ game can be specified with this switch.
 `-i  <path-to-shadowrun-install-folder>`
 
 The script comes with some glob patterns that it uses to locate the Shadowrun games. It is not unlikely for this 
-process to fail, though, and this commandline option can be used to manually point the script to the Shadowrun game that is to be
-modified. 
+process to fail, though, and this commandline option can be used to manually point the script to the Shadowrun game that is to be modified. 
 
-**Pitfalls:** 
+Pitfalls: 
 
 -The path given with the `-i` switch should just lead to the root directory of the installation, e. g. 
 `/some/folders/Shadowrun Dragonfall Director's Cut` or `/some/folders/Shadowrun Hong Kong`.
@@ -112,7 +112,7 @@ the entrails of a Windows environment but as of now portability is not guarantee
 
 ## Acknowledgments
 *Shadow-Tune* wouldn't exist without the mod *CalFree in Chains* and its creator. He laid the groundwork for this project by 
-discovering how the sound files are linked together and formulating the steps required to swap out the soundtrack.
+discovering how the sound files are linked together and identifying the required steps to successfully swap out the soundtrack.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
