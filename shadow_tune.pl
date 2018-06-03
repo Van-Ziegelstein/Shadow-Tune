@@ -269,7 +269,7 @@ if ( @ARGV != 0) {
 
    until (@ARGV == 0) {
 
-       if ($ARGV[0] =~ /--help/i) { help_dialogue; exit 0; }
+       if ($ARGV[0] =~ /-*help/i) { help_dialogue; exit 0; }
 
        elsif ($ARGV[0] =~ /-swap/i) { 
                                       $operation = 1; 
