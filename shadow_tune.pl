@@ -20,7 +20,7 @@ sub find_game_resources {
     PATH_TRIAL: foreach my $path_expr (@{$op_params->{install_dirs}}) {
 
         foreach my $path (bsd_glob("$path_expr")) {
-	    
+
             if ($path =~ /Shadowrun\s$op_params->{edition}/) {
            
 	        $sr_resources = bsd_glob("$path/*_Data");
@@ -250,7 +250,7 @@ if ( @ARGV != 0) {
                                      "~/.local/share/Steam/steamapps/common/Shadowrun*",
                                      "~/.steam/steam/SteamApps/common/Shadowrun*",
                                      "~/{[Ss]team,[Gg]ames,GOG}/{,[Ss]team/,GOG/,[Ss]hadowrun/}Shadowrun*",
-                                     "~/.wine{,32,64,_steam,_shadowrun}/drive_c/{GOG Games,Program Files/Steam/steamapps/common}/Shadowrun*"
+                                     "~/.wine{,32,64,_steam,_shadowrun}/drive_c/{GOG Games,Program Files{, (x86)}/Steam/steamapps/common}/Shadowrun*"
 		                    ],                
 
                     #Hardcoded offsets for the respective Shadowrun game at which 
