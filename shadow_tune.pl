@@ -159,7 +159,7 @@ sub swap_music_files {
    close($new_resS);
    $offset_meta{"new_offsets"} = [ resS_dump($op_params, $new_resS_content) ];
 
-   open(my $current_resS, ">", "$op_params->{sr_resources}/resources.assets.resS") 
+   open(my $current_resS, ">:raw", "$op_params->{sr_resources}/resources.assets.resS") 
    or die "Unable to update resources.assets.resS.\n";
    
    print $current_resS $new_resS_content;
