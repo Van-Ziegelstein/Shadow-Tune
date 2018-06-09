@@ -111,8 +111,14 @@ the entrails of a Windows environment but as of now portability is not guarantee
 **Van Ziegelstein** - Creator and Maintainer 
 
 ## Acknowledgments
-*Shadow-Tune* wouldn't exist without the mod *CalFree in Chains* and its creator. He laid the groundwork for this project by 
-discovering how the sound files are linked together and identifying the required steps to successfully swap out the soundtrack.
+Every Shadowrunner needs the right team for the job and *Shadow-Tune* wouldn't exist without the groundwork laid by two
+particular runners:
+
+**Zetor** - Performed the initial research into the sound resources of Shadowrun Returns and discovered how `resources.assets`
+and `resources.assets.resS` were related.
+
+**Cirion** - Creator of the UGC campaigns *Antumbra Saga*, *Caldecott Caper* and *CalFree in Chains*. Expanded Zetor's research
+with regard to the audio format of `resources.assets.resS` and built the first music replacer for *Shadowrun Hong Kong*.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
