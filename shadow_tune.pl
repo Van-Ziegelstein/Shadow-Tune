@@ -10,6 +10,7 @@ use Fcntl qw( SEEK_SET SEEK_END );
 sub find_game_resources {
     
     my $sr_resources;
+    my $install_dirs;
     my $op_params = $_[0];
     
     die "Invalid game selection. Either of returns|dragonfall|hongkong must be specified.\n" 
@@ -17,7 +18,16 @@ sub find_game_resources {
     
     $op_params->{edition} =~ s/Hongkong/Hong\ Kong/;
 
-    PATH_TRIAL: foreach my $path_expr (@{$op_params->{install_dirs}}) {
+
+    if ($^O eq 'MSWin32') { $install_dirs = $op_params->{windows_dirs}; }
+
+    elsif ($^O eq 'darwin') { $install_dirs = $op_params->{mac_dirs}; }
+
+    else { $install_dirs = $op_params->{linux_dirs}; }
+
+    print "Detected OS: $^O\n";
+
+    PATH_TRIAL: foreach my $path_expr (@{$install_dirs}) {
 
         foreach my $path (bsd_glob("$path_expr")) {
 
@@ -244,14 +254,25 @@ if ( @ARGV != 0) {
 		    new_resS_file => undef,
 		    verbose => 0,
 
-		    #Some path glob patterns that are used by the script to locate the Shadowrun games. 
-		    #Currently only Linux specific patterns have been tested.
-                    install_dirs => [
-                                     "~/.local/share/Steam/steamapps/common/Shadowrun*",
-                                     "~/.steam/steam/SteamApps/common/Shadowrun*",
-                                     "~/{[Ss]team,[Gg]ames,GOG}/{,[Ss]team/,GOG/,[Ss]hadowrun/}Shadowrun*",
-                                     "~/.wine{,32,64,_steam,_shadowrun}/drive_c/{GOG Games,Program Files{, (x86)}/Steam/steamapps/common}/Shadowrun*"
-		                    ],                
+		    #Some OS specific glob patterns that are used by the script to locate the Shadowrun games. 
+                    linux_dirs => [
+                                   "~/.local/share/Steam/steamapps/common/Shadowrun*",
+                                   "~/.steam/steam/SteamApps/common/Shadowrun*",
+                                   "~/{[Ss]team,[Gg]ames,GOG}/{,[Ss]team/,GOG/,[Ss]hadowrun/}Shadowrun*",
+                                   "~/.wine{,32,64,_steam,_shadowrun}/drive_c/{GOG Games,Program Files{, (x86)}/Steam/steamapps/common}/Shadowrun*"
+
+		                  ],                
+
+                    windows_dirs => [
+                                     "c:/Program Files{, (x86)}/{,Steam/steamapps/common/}Shadowrun*",
+				     "c:/GOG Games/Shadowrun*"
+ 
+		                    ],
+
+                    mac_dirs => [
+		                 "~/Library/Application Support/Steam/SteamApps/common/Shadowrun*"
+                                 
+		                ],
 
                     #Hardcoded offsets for the respective Shadowrun game at which 
 		    #the script will start loading the resources.assets file into memory.
