@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 use File::Copy;
+use File::Glob ':bsd_glob';
 use Fcntl qw( SEEK_SET SEEK_END );
 
 
@@ -18,11 +19,11 @@ sub find_game_resources {
 
     PATH_TRIAL: foreach my $path_expr (@{$op_params->{install_dirs}}) {
 
-        foreach my $path (glob(qq/"$path_expr"/)) {
+        foreach my $path (bsd_glob("$path_expr")) {
 	    
             if ($path =~ /Shadowrun\s$op_params->{edition}/) {
            
-	        $sr_resources = glob(qq|"$path/*_Data"|);
+	        $sr_resources = bsd_glob("$path/*_Data");
                 last PATH_TRIAL;
                 
             }
@@ -167,7 +168,7 @@ sub music_replace {
    
    die "You must give a valid path to a new resources.assets.resS file.\n" 
    unless $op_params->{new_resS_file} 
-   && -s glob(qq/"$op_params->{new_resS_file}"/);
+   && -s bsd_glob("$op_params->{new_resS_file}");
  
    $op_params->{sr_resources} = find_game_resources($op_params); 
 
@@ -248,8 +249,7 @@ if ( @ARGV != 0) {
                     install_dirs => [
                                      "~/.local/share/Steam/steamapps/common/Shadowrun*",
                                      "~/.steam/steam/SteamApps/common/Shadowrun*",
-                                     "~/{Steam,Games,GOG}/{,Steam/,GOG/,Shadowrun/}Shadowrun*",
-                                     "~/{steam,games,gog}/{,steam/,gog/,shadowrun/}Shadowrun*",
+                                     "~/{[Ss]team,[Gg]ames,GOG}/{,[Ss]team/,GOG/,[Ss]hadowrun/}Shadowrun*",
                                      "~/.wine{,32,64,_steam,_shadowrun}/drive_c/{GOG Games,Program Files/Steam/steamapps/common}/Shadowrun*"
 		                    ],                
 
