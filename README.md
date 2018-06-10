@@ -28,7 +28,7 @@ Shadow-Tune aims to automate this replacement process. However, it is **not** a 
 up to the user to provide a properly formatted `resources.assets.resS` file.
 
 ## Why does this exist?
-Shadow-Tune 1.0 was originally developed as part of the effort to bring the Shadowrun Hong Kong Mod *CalFree in Chains*
+Shadow-Tune 1.0 was originally developed as part of the effort to bring the Shadowrun Hong Kong mod *CalFree in Chains*
 (which every self-respecting Shadowrunner should play if he/she/it hasn't already) to Linux platforms. The mod came with its
 own soundtrack and a Linux-specific solution was needed to properly apply it and restore vanilla behavior once finished with the campaign.
 
