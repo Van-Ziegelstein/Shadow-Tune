@@ -228,11 +228,11 @@ sub help_dialogue {
  
  print "-Swap music files:\n",
        "$0 -swap <path-to-new-resources.assets.resS-file> [-e returns|dragonfall|hongkong ] [-i <path-to-shadowrun-install-folder>] [-v]\n",
-       "The file provided via the -swap option should be the new resources.assets.resS file containing the music tracks (in ogg vorbis format).\n",
-       "Before replacing the original, the script will make a backup copy of the resources.assets.resS file that can later be used for the restore operation.\n\n",
+       "The selected resources.assets.resS file should contain the new music tracks (in Ogg Vorbis format).\n",
+       "The script will make a backup copy of the original resources.assets.resS that can later be used for the restore operation.\n\n",
        "-Restore original music:\n",
        "$0 -restore [-e returns|dragonfall|hongkong ] [-i <path-to-shadowrun-install-folder>] [-v]\n",
-       "This operation will fail if the script can't locate the backup copy mentioned above.\n\n",
+       "This operation will fail if the script can't locate the backup copy.\n\n",
 }
 
 
