@@ -11,6 +11,8 @@ Perl script to swap out the soundtrack of Harebrained Scheme's Shadowrun games w
 
 [Limitations](#limitations)
 
+Need more documentation? Visit the [wiki](https://github.com/Van-Ziegelstein/Shadow-Tune/wiki)!
+
 ## What is this exactly?
 At its core, *Shadow-Tune* is a tool to manipulate the music resource files of the three
 Shadowrun Games released by Harebrained Schemes:
@@ -25,7 +27,8 @@ with something else will have to overwrite the `resources.assets.resS` file with
 update the aforementioned metadata.
 
 *Shadow-Tune* aims to automate this replacement process. However, it is **not** a music converter and it is
-up to the user to provide a properly formatted `resources.assets.resS` file.
+up to the user to provide a properly formatted `resources.assets.resS` file. (More information on how to create
+a custom version of this file can be found in the [wiki](https://github.com/Van-Ziegelstein/Shadow-Tune/wiki/FAQ)!)
 
 ## Why does this exist?
 *Shadow-Tune* `1.0` was originally developed as part of the effort to bring the UGC campaign [CalFree in Chains](https://steamcommunity.com/sharedfiles/filedetails/?id=1239356669)
@@ -42,7 +45,7 @@ Most Linux and Unix flavors should come with one pre-installed. Windows users mi
 
 ## Installation
 Download the latest version from the [Release](https://github.com/Van-Ziegelstein/Shadow-Tune/releases) page or clone the repo. 
-Don't forget to make the script executable after extraction! 
+If you are on Linux, don't forget to make the script executable after extraction! 
 
 Only core modules were used, so no additional packages should have to be installed.
 
@@ -89,6 +92,8 @@ the path.)
 `-v`
 
 Obtain more verbose output.
+
+For more examples, check out the [FAQ](https://github.com/Van-Ziegelstein/Shadow-Tune/wiki/FAQ)!
 
 ## Screenshots
 
