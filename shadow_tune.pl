@@ -10,7 +10,7 @@ use Fcntl qw( SEEK_SET SEEK_END );
 sub find_game_resources {
     
     my $sr_resources;
-    my $op_params = $_[0];
+    my $op_params = shift;
     
     die "Invalid game selection. Either of returns|dragonfall|hongkong must be specified.\n" 
     unless $op_params->{edition} =~ s/^(returns|dragonfall|hongkong)$/\u$1/i;
@@ -128,7 +128,7 @@ sub asset_update {
 
 sub swap_music_files {
 
-   my $op_params = $_[0];
+   my $op_params = shift;
    my $sound_meta_start = $op_params->{meta_offsets}{$op_params->{edition}};
    my %offset_meta;
 
@@ -164,7 +164,7 @@ sub swap_music_files {
 
 sub music_replace {
 
-   my $op_params = $_[0];
+   my $op_params = shift;
    
    die "You must give a valid path to a new resources.assets.resS file.\n" 
    unless $op_params->{new_resS_file} 
@@ -199,7 +199,7 @@ sub music_replace {
 
 sub music_restore {
 
-   my $op_params = $_[0];
+   my $op_params = shift;
 
    $op_params->{sr_resources} = find_game_resources($op_params); 
    $op_params->{new_resS_file} = "$op_params->{sr_resources}/resources.assets.resS.bak";
