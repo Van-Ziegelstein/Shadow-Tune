@@ -56,6 +56,20 @@ sub server_setup {
        }
        
        elsif ($tagged_params{method} eq "POST") {
+             
+	     if ($req_params{query} == "exceeded") {
+                
+		print $cl_sockfd "HTTP/1.1 413 Payload Too Large\r\n\r\n";
+                goto CLOSE_CONNECTION;
+
+	     }
+             
+	     elsif ($req_params{query} == "length_missing") {
+                
+		   print $cl_sockfd "HTTP/1.1 411 Length Required\r\n\r\n";
+                   goto CLOSE_CONNECTION;
+
+	     }
 
              my $game = shadow_dump->new("Returns", 0);    
              $game->detect_platform();
@@ -93,7 +107,7 @@ sub request_parser {
 
   foreach my $element (@{$_[0]}) {
   
-     if ( $element =~ /(\D+)\s(\/.*)\sHTTP\/[\d\.]+/ ) { $req_params{method} = $1; $req_params{url_path} = $2; }
+     if ($element =~ /(\D+)\s(\/.*)\sHTTP\/[\d\.]+/) { $req_params{method} = $1; $req_params{url_path} = $2; }
   
      $req_params{content_length} = $1 if $element =~ /Content-Length:\s(\d+)/;
      
@@ -101,27 +115,27 @@ sub request_parser {
 
   $req_params{method} //= "Unknown";
 
-  if ( $req_params{method} eq "POST" ) { 
+  if ($req_params{method} eq "POST") { 
+
+     if (defined $req_params{content_length}) {
   
-     if ( defined $req_params{content_length} && $req_params{content_length} <= 500 ) { 
+         if ($req_params{content_length} <= 500 ) { 
      
-           read($cl_sock, $req_params{query}, $req_params{content_length});
-     
-     }
-     
-     else { $req_params{query} = "exceeded"; }
-  
+             read($cl_sock, $req_params{query}, $req_params{content_length});
+	     $req_params{query} =~ s/\+/\s/g;
 
-     if (defined $req_params{query} &&  $req_params{query} ne "exceeded") {
-
-           $req_params{query} =~ s/\+/\s/g;
-
-           foreach my $field (@form_fields) {
+             foreach my $field (@form_fields) {
 
                    if ($req_params{query} =~ /$field=(.*?)&/ ) { $req_params{$field} = $1; }
-	   }
-          
+	     }
+
+         }
+
+         else { $req_params{query} = "exceeded"; }
+
      }
+
+     else { $req_params{query} = "length_missing"; }
      
   }
 
