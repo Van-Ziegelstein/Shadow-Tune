@@ -86,6 +86,8 @@ sub server_setup {
 
              elsif (defined $tagged_params{action} && $tagged_params{action} == 2) { $game->music_restore(); } 
 
+	     else { print $cl_sockfd "HTTP/1.1 405 Method Not Allowed\r\n\r\n"; }
+
        }       
   
        CLOSE_CONNECTION: close($cl_sockfd);
