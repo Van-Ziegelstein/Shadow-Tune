@@ -48,9 +48,12 @@ sub server_setup {
 
        }
 
-       elsif ($tagged_params{method} eq "GET" && $tagged_params{url_path} eq "/" ) {  content_display($cl_sockfd, page_creator()); }
+       elsif ($tagged_params{method} eq "GET") {  
+                   
+             if ($tagged_params{url_path} eq "/help") { content_display($cl_sockfd, help_screen()); }
 
-       elsif ($tagged_params{method} eq "GET" && $tagged_params{url_path} eq "/help" ) { content_display($cl_sockfd, help_screen()); }
+             else { content_display($cl_sockfd, page_creator()); }
+       }
        
        elsif ($tagged_params{method} eq "POST") {
 
@@ -215,7 +218,7 @@ sub page_creator {
                    document.getElementById("action_box").innerHTML = this.responseText;
                
           });
-          xhreq.open("GET", "help", true);
+          xhreq.open("GET", "/help", true);
           xhreq.send();
      }
 
