@@ -44,7 +44,6 @@ sub server_setup {
        if ( $tagged_params{method} eq "unknown" ) {
        
           print $cl_sockfd "HTTP/1.1 400 Bad Request\r\n\r\n";
-          goto CLOSE_CONNECTION;
 
        }
 
@@ -60,36 +59,37 @@ sub server_setup {
 	     if ($req_params{query} == "exceeded") {
                 
 		print $cl_sockfd "HTTP/1.1 413 Payload Too Large\r\n\r\n";
-                goto CLOSE_CONNECTION;
 
 	     }
              
 	     elsif ($req_params{query} == "length_missing") {
                 
 		   print $cl_sockfd "HTTP/1.1 411 Length Required\r\n\r\n";
-                   goto CLOSE_CONNECTION;
 
 	     }
 
-             my $game = shadow_dump->new("Returns", 0);    
-             $game->detect_platform();
+	     else {
+
+                  my $game = shadow_dump->new("Returns", 0);    
+                  $game->detect_platform();
                   
-             $game->add_game_path($tagged_params{sr_install}) if defined $tagged_params{sr_install};
+                  $game->add_game_path($tagged_params{sr_install}) if defined $tagged_params{sr_install};
 
-             $game->set_resS_file($tagged_params{new_resS}) if defined $tagged_params{new_resS};
+                  $game->set_resS_file($tagged_params{new_resS}) if defined $tagged_params{new_resS};
 
-	     $game->set_edition($tagged_params{edition}) if defined $tagged_params{edition};
+	          $game->set_edition($tagged_params{edition}) if defined $tagged_params{edition};
 
-	     $game->set_verbose($tagged_params{verbose}) if defined $tagged_params{verbose};
+	          $game->set_verbose($tagged_params{verbose}) if defined $tagged_params{verbose};
 
-	     if (defined $tagged_params{action} && $tagged_params{action} == 1) { $game->music_replace(); } 
+	          if (defined $tagged_params{action} && $tagged_params{action} == 1) { $game->music_replace(); } 
 
-             elsif (defined $tagged_params{action} && $tagged_params{action} == 2) { $game->music_restore(); } 
+                  elsif (defined $tagged_params{action} && $tagged_params{action} == 2) { $game->music_restore(); } 
 
-	     else { print $cl_sockfd "HTTP/1.1 405 Method Not Allowed\r\n\r\n"; }
+	          else { print $cl_sockfd "HTTP/1.1 405 Method Not Allowed\r\n\r\n"; }
 
-       }       
-  
+             }       
+       }
+
        CLOSE_CONNECTION: close($cl_sockfd);
        
     }
