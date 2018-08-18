@@ -56,13 +56,13 @@ sub server_setup {
        
        elsif ($tagged_params{method} eq "POST") {
              
-	     if ($req_params{query} == "exceeded") {
+	     if ($tagged_params{query} == "exceeded") {
                 
 		print $cl_sockfd "HTTP/1.1 413 Payload Too Large\r\n\r\n";
 
 	     }
              
-	     elsif ($req_params{query} == "length_missing") {
+	     elsif ($tagged_params{query} == "length_missing") {
                 
 		   print $cl_sockfd "HTTP/1.1 411 Length Required\r\n\r\n";
 
