@@ -339,7 +339,7 @@ my $port = 49003;
 
 until (@ARGV == 0) {
 
-  if ($ARGV[0] =~ /-*help/i) { print help_dialogue(); exit 0; }
+  if ($ARGV[0] =~ /-*help/i) { print help_screen(); exit 0; }
 
   elsif ($ARGV[0] =~ /-p/) { get_option(); chomp($port = $ARGV[0]); }
 
