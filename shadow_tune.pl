@@ -41,11 +41,10 @@ sub server_setup {
   
        my %tagged_params = request_parser($cl_sockfd, \@req_params); 
        
-       if ($tagged_params{method} eq "unknown" || $tagged_params{bad_input} == 1) {
-       
-          print $cl_sockfd "HTTP/1.1 400 Bad Request\r\n\r\n";
+       print $cl_sockfd "HTTP/1.1 400 Bad Request\r\n\r\n" unless
+       defined $tagged_params{method} &&
+       $tagged_params{bad_input} == 0;
 
-       }
 
        elsif ($tagged_params{method} eq "GET") {  
                    
@@ -115,9 +114,8 @@ sub request_parser {
      
   }
 
-  $req_params{method} //= "Unknown";
 
-  if ($req_params{method} eq "POST") { 
+  if (defined $req_params{method} && $req_params{method} eq "POST") { 
 
      if (defined $req_params{content_length}) {
   
