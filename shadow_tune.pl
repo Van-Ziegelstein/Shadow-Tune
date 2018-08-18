@@ -56,13 +56,13 @@ sub server_setup {
        
        elsif ($tagged_params{method} eq "POST") {
              
-	     if ($tagged_params{query} == "exceeded") {
+	     if ($tagged_params{length_exceeded} == 1) {
                 
 		print $cl_sockfd "HTTP/1.1 413 Payload Too Large\r\n\r\n";
 
 	     }
              
-	     elsif ($tagged_params{query} == "length_missing") {
+	     elsif ($tagged_params{length_missing} == 1) {
                 
 		   print $cl_sockfd "HTTP/1.1 411 Length Required\r\n\r\n";
 
@@ -103,7 +103,7 @@ sub server_setup {
 
 sub request_parser {
 
-  my %req_params;
+  my %req_params = (bad_input => 0, length_exceeded => 0, length_missing => 0);
   my $cl_sock = shift;
   my @form_fields = ("sr_install", "new_resS", "action", "edition", "verbose");
 
@@ -135,11 +135,11 @@ sub request_parser {
 
          }
 
-         else { $req_params{query} = "exceeded"; }
+         else { $req_params{length_exceeded} = 1; }
 
      }
 
-     else { $req_params{query} = "length_missing"; }
+     else { $req_params{length_missing} = 1; }
      
   }
 
