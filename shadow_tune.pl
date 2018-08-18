@@ -41,7 +41,7 @@ sub server_setup {
   
        my %tagged_params = request_parser($cl_sockfd, \@req_params); 
        
-       if ( $tagged_params{method} eq "unknown" ) {
+       if ($tagged_params{method} eq "unknown" || $tagged_params{bad_input} == 1) {
        
           print $cl_sockfd "HTTP/1.1 400 Bad Request\r\n\r\n";
 
@@ -124,6 +124,8 @@ sub request_parser {
          if ($req_params{content_length} <= 500 ) { 
      
              read($cl_sock, $req_params{query}, $req_params{content_length});
+
+	     $req_params{bad_input} = 1 unless $req_params{query} =~ /^[\w\+&=\\\/]+$/;
 	     $req_params{query} =~ s/\+/\s/g;
 
              foreach my $field (@form_fields) {
