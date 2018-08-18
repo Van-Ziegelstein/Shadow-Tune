@@ -41,12 +41,12 @@ sub server_setup {
   
        my %tagged_params = request_parser($cl_sockfd, \@req_params); 
        
-       print $cl_sockfd "HTTP/1.1 400 Bad Request\r\n\r\n" unless
-       defined $tagged_params{method} &&
+       print $cl_sockfd "HTTP/1.1 400 Bad Request\r\n\r\n" unless 
+       defined $tagged_params{method} && 
        $tagged_params{bad_input} == 0;
 
 
-       elsif ($tagged_params{method} eq "GET") {  
+       if ($tagged_params{method} eq "GET") {  
                    
              if ($tagged_params{url_path} eq "/help") { content_display($cl_sockfd, help_screen()); }
 
