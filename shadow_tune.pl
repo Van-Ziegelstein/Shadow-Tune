@@ -50,7 +50,7 @@ sub server_setup {
                    
              if ($tagged_params{url_path} eq "/help") { content_display($cl_sockfd, help_screen()); }
 
-             else { content_display($cl_sockfd, page_creator()); }
+             else { content_display($cl_sockfd, fetch_page()); }
        }
        
        elsif ($tagged_params{method} eq "POST") {
@@ -146,139 +146,16 @@ sub request_parser {
 }
 
 
-sub page_creator {
+sub fetch_page {
 
-  my $page = <<~"EOF";
-  <!DOCTYPE html>
-  <html>
-  <head>
-  <meta charset="utf-8">
-  <style>
-  body {
-  
-     background-color: black;
-     color: #10EEEE;
-  }
-  h1 {
-     text-align: center;
-  }
-  form {
-     margin-top: 50px;
-     margin-left: 100px;
-  }
-  input {
-     margin: 5px;
-     padding: 5px;
+  my $page_content;
 
-  }
-  input[type=text] {
-       width: 40%;
-  }
-  input[type=submit] {
-       margin-top: 30px;
-  }
+  open(my $page_fd, "<", "page_content/landing.html") or die "Can't open page document.\n";
 
-  .subsection {
-       margin-top: 30px;
-       margin-bottom: 0px;
-  }
-  #help_button {
-     margin-top: 100px;
-     float: right;
-  }
-  #warn_msg {
-  
-     margin-top: 200px;
-     margin-left: 100px;
-  }
-  #action_box {
-  
-     border: 1px dashed; 
-     margin-top: 50px;
-     margin-left: 100px;
-     padding: 10px;
-     width: 600px;
-     height: 600px;
-     display: none;
-  }
-  </style>
-  </head>
-  <body>
-  <h1>Shadow Tune</h1>
-  <div id="help_button"><button type="button" onclick="get_help()">Help</button></div>
-  <div id="warn_msg"></div>
-  <form id="shadow_form">
-    <span>Path to Shadowrun game folder:</span><input type="text" name="sr_install"><br>
-    <span>New resourcres.assets.resS file:</span><input type="text" name="new_resS"><br>
-    <p class="subsection">Action:</p><br>
-      <input type="radio" name="action" value="swap" checked>Replace<br>
-      <input type="radio" name="action" value="restore">Restore<br>
-    <p class="subsection">Shadowrun game:</p><br>
-      <input type="radio" name="edition" value="Returns" checked>Shadowrun Returns<br>
-      <input type="radio" name="edition" value="Dragonfall">Shadowrun Dragonfall<br>
-      <input type="radio" name="edition" value="Hongkong">Shadowrun Hong Kong<br>
-    <p class="subsection">Other options:</p><br>
-      <input type="radio" name="verbose" value=1>Verbose output<br>  
-    <input type="submit" value="Go">
-  </form> 
-  <div id="action_box"></div>
-  <script>
-     function toggle_box() { document.getElementById("action_box").style.display = "block"; }
+  while (<$page_fd>) { $page_content .= $_; }
 
-     function get_help() {
-          
-          var xhreq = new XMLHttpRequest();
-          xhreq.addEventListener("load", function(event) {
-          
-                   toggle_box();
-                   document.getElementById("action_box").innerHTML = this.responseText;
-               
-          });
-          xhreq.open("GET", "/help", true);
-          xhreq.send();
-     }
-
-     function send_form () {
-
-          var xhreq = new XMLHttpRequest();
-          var form_content = new FormData(document.getElementById("shadow_form"));
-
-          xhreq.addEventListener("load", function(event) {
-               toggle_box();
-               document.getElementById("action_box").innerHTML= this.responseText;
-          });
-
-          xhreq.addEventListener("error", function(event) {
-               alert('Oops! Something went wrong.');
-          });
-
-
-          xhreq.open("POST", "/", true);
-          xhreq.send(form_content);
-     } 
-
-     var form = document.getElementById("shadow_form");
-
-     form.addEventListener("submit", function (event) {
-          event.preventDefault();
-
-          var resS_field = document.forms[0]["new_resS"].value;
-
-          if (resS_field == "") {
-
-               document.getElementById("warn_msg").innerHTML = "You must provide a new resources.assets.resS file!";
-          } 
-          else {
-
-               send_form();
-          }
-     })
-  </script>
-  </body>
-  </html>
-  EOF
-
-  return $page;  
+  close($page_fd);
+  return $page_content;  
   
 }
 
