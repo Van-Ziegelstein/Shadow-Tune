@@ -87,11 +87,19 @@ sub server_setup {
                   open(STDOUT, ">", \$recorded_out) or die "Can't re-open STDOUT\n"; 
                   open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
 
-	          if (defined $tagged_params{action} && $tagged_params{action} == 1) { $game->music_replace(); content_display($cl_sockfd, $recorded_out);  } 
+	          if (defined $tagged_params{action} && $tagged_params{action} eq "swap") { 
+		  
+		         $game->music_replace(); 
+	          } 
 
-                  elsif (defined $tagged_params{action} && $tagged_params{action} == 2) { $game->music_restore(); content_display($cl_sockfd, $recorded_out); } 
+                  elsif (defined $tagged_params{action} && $tagged_params{action} eq "restore") { 
+		  
+		         $game->music_restore(); 
+		  } 
 
-	          else { print $cl_sockfd "HTTP/1.1 405 Method Not Allowed\r\n\r\n"; }
+	          else { print "Invalid action.\n"; }
+
+	          print $cl_sockfd $recorded_out; 
 
              }       
        }
