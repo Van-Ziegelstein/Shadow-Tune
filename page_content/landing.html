@@ -125,10 +125,24 @@
           xhreq.send();
      }
 
+     function create_query(form_obj) {
+              
+	  var query_string = "";
+
+	  for (var form_item of form_obj.keys()) {
+
+              query_string += form_item + "=" + form_obj.get(form_item) + "&"; 
+
+	  }
+
+          return query_string.slice(0, -1);    
+     }
+
      function send_form () {
 
           var xhreq = new XMLHttpRequest();
           var form_content = new FormData(document.getElementById("shadow_form"));
+	  var query = create_query(form_content);
 
           xhreq.addEventListener("load", function(event) {
                toggle_box();
@@ -141,7 +155,8 @@
 
 
           xhreq.open("POST", "/", true);
-          xhreq.send(form_content);
+	  xhreq.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+          xhreq.send(query);
      } 
 
      var form = document.getElementById("shadow_form");
