@@ -80,9 +80,16 @@ sub server_setup {
 
 	          $game->set_verbose($tagged_params{verbose}) if defined $tagged_params{verbose};
 
-	          if (defined $tagged_params{action} && $tagged_params{action} == 1) { $game->music_replace(); } 
+		  
+		  local (*STDOUT, *STDERR);
+		  my $recorded_out;
+		  close(STDOUT);
+                  open(STDOUT, ">", \$recorded_out) or die "Can't re-open STDOUT\n"; 
+                  open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
 
-                  elsif (defined $tagged_params{action} && $tagged_params{action} == 2) { $game->music_restore(); } 
+	          if (defined $tagged_params{action} && $tagged_params{action} == 1) { $game->music_replace(); content_display($cl_sockfd, $recorded_out);  } 
+
+                  elsif (defined $tagged_params{action} && $tagged_params{action} == 2) { $game->music_restore(); content_display($cl_sockfd, $recorded_out); } 
 
 	          else { print $cl_sockfd "HTTP/1.1 405 Method Not Allowed\r\n\r\n"; }
 
