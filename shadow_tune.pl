@@ -216,13 +216,13 @@ sub get_option {
 sub help_screen {
  
    $help_text = <<~"EOF"; 
-   -Swap music files:
-   $0 -swap <path-to-new-resources.assets.resS-file> [-e returns|dragonfall|hongkong ] [-i <path-to-shadowrun-install-folder>] [-v]
-   The selected resources.assets.resS file should contain the new music tracks (in Ogg Vorbis format).
-   The script will make a backup copy of the original resources.assets.resS that can later be used for the restore operation.
-   -Restore original music:
-   $0 -restore [-e returns|dragonfall|hongkong ] [-i <path-to-shadowrun-install-folder>] [-v]
-   This operation will fail if the script can't locate the backup copy.
+   This is the gui version of Shadow-Tune.
+   Upon startup, the program will fork to the background
+   and start the server.
+   Accepted commandline options are:
+
+   -p: Specify a port to listen on (default 49003).
+   --help: Print this dialogue.
    EOF
 
    return $help_text;
