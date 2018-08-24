@@ -69,39 +69,41 @@ sub server_setup {
 
 	     else {
 
-                  my $game = shadow_dump->new("Returns", 0);    
-                  $game->detect_platform();
+                  my $back_pid = fork();
+		  die "Backend fork failed.\n" unless defined $back_pid;
+
+                  if ($back_pid == 0) {
+		  
+		      my $game = shadow_dump->new("Returns", 0);    
+                      $game->detect_platform();
                   
-                  $game->add_game_path($tagged_params{sr_install}) if defined $tagged_params{sr_install};
+                      $game->add_game_path($tagged_params{sr_install}) if defined $tagged_params{sr_install};
 
-                  $game->set_resS_file($tagged_params{new_resS}) if defined $tagged_params{new_resS};
+                      $game->set_resS_file($tagged_params{new_resS}) if defined $tagged_params{new_resS};
 
-	          $game->set_edition($tagged_params{edition}) if defined $tagged_params{edition};
+	              $game->set_edition($tagged_params{edition}) if defined $tagged_params{edition};
 
-	          $game->set_verbose($tagged_params{verbose}) if defined $tagged_params{verbose};
+	              $game->set_verbose($tagged_params{verbose}) if defined $tagged_params{verbose};
 
-		  
-		  local (*STDOUT, *STDERR);
-		  my $recorded_out;
-		  close(STDOUT);
-                  open(STDOUT, ">", \$recorded_out) or die "Can't re-open STDOUT\n"; 
-                  open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
+		 
+                      open(STDOUT, ">&=", $cl_sockfd);
+                      $| = 1;
+                      open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
 
-	          if (defined $tagged_params{action} && $tagged_params{action} eq "swap") { 
-		  
-		         $game->music_replace(); 
-	          } 
+	              if (defined $tagged_params{action} && $tagged_params{action} eq "swap") { $game->music_replace(); } 
 
-                  elsif (defined $tagged_params{action} && $tagged_params{action} eq "restore") { 
-		  
-		         $game->music_restore(); 
-		  } 
+                      elsif (defined $tagged_params{action} && $tagged_params{action} eq "restore") { $game->music_restore(); } 
 
-	          else { print "Invalid action.\n"; }
+	              else { print "Invalid action.\n"; }
+                      
+		      exit;
 
-	          print $cl_sockfd $recorded_out; 
+		 }
+
+		 wait();
 
              }       
+
        }
 
        CLOSE_CONNECTION: close($cl_sockfd);
