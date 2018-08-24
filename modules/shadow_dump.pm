@@ -79,7 +79,7 @@ sub detect_platform {
 sub set_resS_file {
    
    my ($self, $resS_file) = @_;
-   $self->{new_resS_file} = $resS_file if defined $resS_file;
+   $self->{new_resS_file} = bsd_glob($resS_file) if defined $resS_file;
 
 }
 
@@ -286,7 +286,7 @@ sub music_replace {
    
    die "You must give a valid path to a new resources.assets.resS file.\n" 
    unless defined $self->{new_resS_file} 
-   && -s bsd_glob("$self->{new_resS_file}");
+   && -s $self->{new_resS_file};
 
    $self->find_game(); 
 
