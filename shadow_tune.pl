@@ -168,7 +168,8 @@ sub music_replace {
    
    die "You must give a valid path to a new resources.assets.resS file.\n" 
    unless $op_params->{new_resS_file} 
-   && -s bsd_glob("$op_params->{new_resS_file}");
+   && -s $op_params->{new_resS_file};
+
  
    $op_params->{sr_resources} = find_game_resources($op_params); 
 
@@ -304,7 +305,7 @@ if ( @ARGV != 0) {
        elsif ($ARGV[0] =~ /-swap/i) { 
                                       $operation = 1; 
                                       get_option();				    
-                                      chomp($op_params{new_resS_file} = $ARGV[0]);
+                                      chomp($op_params{new_resS_file} = bsd_glob($ARGV[0]));
 				    }
 
        elsif ($ARGV[0] =~ /-restore/i) { $operation = 2; }
