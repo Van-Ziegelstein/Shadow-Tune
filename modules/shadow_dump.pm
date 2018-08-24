@@ -156,7 +156,7 @@ sub find_game {
     die "Unable to locate Shadowrun $self->{edition} game assets.\n" 
     unless defined $self->{sr_resources} && -d $self->{sr_resources}; 
     
-    print "Found: $self->{sr_resources}\n";
+    print "Found: $self->{sr_resources}\n\n";
 
 }
 
@@ -168,7 +168,7 @@ sub __asset_dump {
     my ($assets_content, $sound_meta_start) = @_;
     my @track_list;
     
-    print "Parsing resources.assets...\n";
+    print ">>> Parsed resources.assets <<<\n";
 
     while ($assets_content =~ /([\w-]+)$delimiter/g) {
 
@@ -195,7 +195,7 @@ sub __resS_dump {
     my ($resS_content, $track_num) = @_;
     my @offset_list;
 
-    print "Parsing resources.assets.resS replacment file...\n";
+    print ">>> Parsed resources.assets.resS replacment file <<<\n";
     print "\n" if $self->{verbose} == 1;
 
     while ($resS_content =~ /$ogg_first_page/g) {
@@ -221,7 +221,7 @@ sub __asset_update {
    die "Number of replacement offsets does not match original track number.\n" 
    unless @{$new_track_offsets} == @{$current_tracklist};  
    
-   print "Remapping offset and size values in resources.assets...\n";
+   print ">>> Remapped offset and size values in resources.assets <<<\n";
 
    push (@{$new_track_offsets}, $resS_end); 
 
@@ -288,27 +288,17 @@ sub music_replace {
    unless defined $self->{new_resS_file} 
    && -s $self->{new_resS_file};
 
-   print "Found replacement file: $self->{new_resS_file}\n"; 
+   print "Found replacement file: $self->{new_resS_file}\n\n"; 
 
    $self->find_game(); 
 
-   while (-e "$self->{sr_resources}/resources.assets.resS.bak") {
+   die "A backup file is already present.\n" if -e "$self->{sr_resources}/resources.assets.resS.bak";
 
-       print "A backup file for resources.assets.resS is already present. ", 
-       "Are you sure you want to continue with the replacement? (y/n) "; 
-
-       chomp(my $user_choice = <STDIN>);
-
-       last if $user_choice =~ /y/i;
-       exit 0 if $user_choice =~ /n/i;
-       print "\n";
-
-   }
 
    move("$self->{sr_resources}/resources.assets.resS", "$self->{sr_resources}/resources.assets.resS.bak") 
    or die "Backup file creation failed.\n";
 
-   print "Created backup: $self->{sr_resources}/resources.assets.resS.bak\n";  
+   print "Created backup: $self->{sr_resources}/resources.assets.resS.bak\n\n";  
 
    $self->__swap_music_files();
 
@@ -324,9 +314,9 @@ sub music_restore {
    $self->find_game(); 
    $self->set_resS_file("$self->{sr_resources}/resources.assets.resS.bak");
 
-   die "No backup file found in $self->{sr_resources}\n" unless -s "$self->{new_resS_file}";
+   die "No backup file found in $self->{sr_resources}\n\n" unless -s "$self->{new_resS_file}";
 
-   print "Found backup file: $self->{new_resS_file}\n";
+   print "Found backup file: $self->{new_resS_file}\n\n";
 
    $self->__swap_music_files();
 
