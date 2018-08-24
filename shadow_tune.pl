@@ -44,9 +44,7 @@ sub find_game_resources {
 sub asset_dump {
 
     my $delimiter = qr/\x00*\x02\x00{3}\x0E\00{7}\x02\x00{3}/;
-    my $op_params = $_[0];
-    my $assets_content = $_[1];
-    my $sound_meta_start = $_[2];
+    my ($op_params, $assets_content, $sound_meta_start) = @_;
     my @track_list;
     
     print "Parsing resources.assets...\n";
@@ -72,8 +70,7 @@ sub asset_dump {
 sub resS_dump {
 
     my $ogg_first_page = qr/OggS\x00\x02/;
-    my $op_params = $_[0];
-    my $resS_content = $_[1];
+    my ($op_params, $resS_content) = @_;
     my $track_num = 0;
     my @offset_list;
 
