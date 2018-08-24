@@ -288,6 +288,8 @@ sub music_replace {
    unless defined $self->{new_resS_file} 
    && -s $self->{new_resS_file};
 
+   print "Found replacement file: $self->{new_resS_file}\n"; 
+
    $self->find_game(); 
 
    while (-e "$self->{sr_resources}/resources.assets.resS.bak") {
@@ -323,6 +325,8 @@ sub music_restore {
    $self->set_resS_file("$self->{sr_resources}/resources.assets.resS.bak");
 
    die "No backup file found in $self->{sr_resources}\n" unless -s "$self->{new_resS_file}";
+
+   print "Found backup file: $self->{new_resS_file}\n";
 
    $self->__swap_music_files();
 
