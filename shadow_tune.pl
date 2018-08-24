@@ -186,7 +186,7 @@ sub music_replace {
 
    }
 
-   move("$op_params->{sr_resources}/resources.assets.resS", "$op_params->{sr_resources}/resources.assets.resS.bak") 
+   copy("$op_params->{sr_resources}/resources.assets.resS", "$op_params->{sr_resources}/resources.assets.resS.bak") 
    or die "Backup file creation failed.\n";
 
    print "Created backup: $op_params->{sr_resources}/resources.assets.resS.bak\n";  
