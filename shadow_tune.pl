@@ -141,7 +141,7 @@ sub swap_music_files {
    $offset_meta{"track_list"} = [ asset_dump($op_params, $assets_content, $sound_meta_start) ];
 
    open(my $new_resS, "<:raw", "$op_params->{new_resS_file}") 
-   or die "Unable to open resources.assets.resS replacment.\n";
+   or die "Unable to open resources.assets.resS replacement.\n";
 
    my $new_resS_content = do { local $/ = undef; <$new_resS>; };
    seek($new_resS, 0, SEEK_END);
