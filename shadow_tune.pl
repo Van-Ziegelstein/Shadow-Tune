@@ -145,7 +145,7 @@ sub request_parser {
 
              foreach my $field (@form_fields) {
 
-                 $req_params{$field} = $1 if $req_params{query} =~ /$field=(.*?)&/;
+                 $req_params{$field} = $1 if $req_params{query} =~ /$field=(.*?)(&|$)/;
 	     }
 
          }
