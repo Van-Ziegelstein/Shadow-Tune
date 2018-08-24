@@ -259,7 +259,7 @@ sub __swap_music_files {
    $offset_meta{"track_list"} = [ $self->__asset_dump($assets_content, $sound_meta_start) ];
 
    open(my $new_resS, "<:raw", "$self->{new_resS_file}") 
-   or die "Unable to open resources.assets.resS replacment.\n";
+   or die "Unable to open resources.assets.resS replacement.\n";
 
    my $new_resS_content = do { local $/ = undef; <$new_resS>; };
    seek($new_resS, 0, SEEK_END);
@@ -287,7 +287,7 @@ sub music_replace {
    die "You must give a valid path to a new resources.assets.resS file.\n" 
    unless defined $self->{new_resS_file} 
    && -s bsd_glob("$self->{new_resS_file}");
- 
+
    $self->find_game(); 
 
    while (-e "$self->{sr_resources}/resources.assets.resS.bak") {
