@@ -2,6 +2,7 @@
 
 use lib 'modules';
 use shadow_dump;
+use shadow_tools qw(detect_platform get_option help_screen);
 
 
 use Socket qw(:DEFAULT :crlf);
@@ -9,15 +10,6 @@ use Encode();
 use POSIX();
 
 
-sub detect_platform {
-
-   #We try to determine the OS by checking what platform the Perl
-   #implementation was compiled for. Linux is the fallback value.
-   return "windows" if $^O eq 'MSWin32'; 
-   return "mac" if $^O eq 'darwin';
-   return "linux";
-
-}
 
 sub server_setup {
 
@@ -213,30 +205,6 @@ sub content_display {
    
    select (STDOUT);
    
-}
-
-
-sub get_option {
-    
-   shift @ARGV;
-   die "Error, option without a value detected.\n" unless @ARGV != 0 && $ARGV[0] !~ /-+\w/; 
-
-}
-
-
-sub help_screen {
- 
-   $help_text = <<~"EOF"; 
-   This is the gui version of Shadow-Tune.
-   Upon startup, the program will fork to the background
-   and start the server.
-   Accepted commandline options are:
-
-   -p: Specify a port to listen on (default 49003).
-   --help: Print this dialogue.
-   EOF
-
-   return $help_text;
 }
 
 
