@@ -146,7 +146,7 @@ sub request_parser {
              read($cl_sock, $req_params{query}, $req_params{content_length});
 
 	     $req_params{bad_input} = 1 unless $req_params{query} =~ /^[\w\+&=\\\/]+$/;
-	     $req_params{query} =~ s/\+/\s/g;
+	     $req_params{query} =~ s/\+/ /g;
 
              foreach my $field (@form_fields) {
 
