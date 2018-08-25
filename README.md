@@ -99,11 +99,11 @@ For more examples, check out the [FAQ](https://github.com/Van-Ziegelstein/Shadow
 
 | Parsing resources.assets of Shadowrun Returns | Parsing a new resources.assets.resS file | Updating resources.assets of Shadowrun Hong Kong | 
 | --- | --- | --- |
-| <img src="screenshots/shadow_tune1.png" width="250" height="400"/> | <img src="screenshots/shadow_tune2.png" width="250" height="400"/> | <img src="screenshots/shadow_tune3.png" width="250" height="400"/> 
+| <img src="screenshots/shadow_tune1.png" width="250" height="400"> | <img src="screenshots/shadow_tune2.png" width="250" height="400"> | <img src="screenshots/shadow_tune3.png" width="250" height="400"> 
 
 | Script invocation in a Windows 10 VM using Strawberry Perl |
 | --- |
-| <img src="screenshots/shadowtune4.png"/> 
+| <img src="screenshots/shadowtune4.png"> 
 
 ## Limitations
 - The script provides no way of accessing and/or modifying individual music tracks, the only available operation
