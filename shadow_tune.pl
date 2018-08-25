@@ -4,7 +4,7 @@ use lib 'modules';
 use shadow_dump;
 
 
-use Socket;
+use Socket qw(:DEFAULT :crlf);
 use Encode();
 use POSIX();
 
@@ -30,18 +30,21 @@ sub server_setup {
        my @req_params;
        my $l_count = 0;
 
-       while ( my $line = <$cl_sockfd> ) {
-                   
-          last if $line =~ /^\r\n/m || $l_count == 25;      
+       local($/) = LF;
+
+       while (<$cl_sockfd>) {
+
+           s/$CR?$LF/\n/;
+           last if /^\n/ || $l_count == 25;      
                
-          push(@req_params, $line);
-          $l_count++;
+           push(@req_params, $_);
+           $l_count++;
                   
        }
   
        my %tagged_params = request_parser($cl_sockfd, \@req_params); 
        
-       print $cl_sockfd "HTTP/1.1 400 Bad Request\r\n\r\n" unless 
+       print $cl_sockfd "HTTP/1.1 400 Bad Request", $CRLF x 2 unless 
        defined $tagged_params{method} && 
        $tagged_params{bad_input} == 0;
 
@@ -57,46 +60,46 @@ sub server_setup {
              
 	     if ($tagged_params{length_exceeded} == 1) {
                 
-		print $cl_sockfd "HTTP/1.1 413 Payload Too Large\r\n\r\n";
+		print $cl_sockfd "HTTP/1.1 413 Payload Too Large", $CRLF x 2;
 
 	     }
              
 	     elsif ($tagged_params{length_missing} == 1) {
                 
-		   print $cl_sockfd "HTTP/1.1 411 Length Required\r\n\r\n";
+		print $cl_sockfd "HTTP/1.1 411 Length Required", $CRLF x 2;
 
 	     }
 
 	     else {
 
-                  my $back_pid = fork();
-		  die "Backend fork failed.\n" unless defined $back_pid;
+                my $back_pid = fork();
+		die "Backend fork failed.\n" unless defined $back_pid;
 
-                  if ($back_pid == 0) {
+                if ($back_pid == 0) {
 		  
-		      my $game = shadow_dump->new("Returns", 0);    
-                      $game->detect_platform();
+		   my $game = shadow_dump->new("Returns", 0);    
+                   $game->detect_platform();
                   
-                      $game->add_game_path($tagged_params{sr_install}) if defined $tagged_params{sr_install};
+                   $game->add_game_path($tagged_params{sr_install}) if defined $tagged_params{sr_install};
 
-                      $game->set_resS_file($tagged_params{new_resS}) if defined $tagged_params{new_resS};
+                   $game->set_resS_file($tagged_params{new_resS}) if defined $tagged_params{new_resS};
 
-	              $game->set_edition($tagged_params{edition}) if defined $tagged_params{edition};
+	           $game->set_edition($tagged_params{edition}) if defined $tagged_params{edition};
 
-	              $game->set_verbose($tagged_params{verbose}) if defined $tagged_params{verbose};
+	           $game->set_verbose($tagged_params{verbose}) if defined $tagged_params{verbose};
 
 		 
-                      open(STDOUT, ">&=", $cl_sockfd);
-                      $| = 1;
-                      open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
+                   open(STDOUT, ">&=", $cl_sockfd);
+                   $| = 1;
+                   open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
 
-	              if (defined $tagged_params{action} && $tagged_params{action} eq "swap") { $game->music_replace(); } 
+	           if (defined $tagged_params{action} && $tagged_params{action} eq "swap") { $game->music_replace(); } 
 
-                      elsif (defined $tagged_params{action} && $tagged_params{action} eq "restore") { $game->music_restore(); } 
+                   elsif (defined $tagged_params{action} && $tagged_params{action} eq "restore") { $game->music_restore(); } 
 
-	              else { print "Invalid action.\n"; }
+	           else { print "Invalid action.\n"; }
                       
-		      exit;
+		   exit;
 
 		 }
 
@@ -185,20 +188,20 @@ sub content_display {
    my $body_length = length(Encode::encode_utf8($markup)); 
    my $http_date =  POSIX::strftime("%a, %d %b %Y %R:%S GMT", gmtime);
    
-   my $response = <<~"EOF";
-   HTTP/1.1 200 OK\r  
-   Date: $http_date\r
-   Server: Eye of Terror\r
-   Content-Type: text/html; charset=UTF-8\r
-   Content-Length: $body_length\r
-   Connection: close\r
-   \r\n
-   $markup 
+   my $response_head = <<~"EOF";
+   HTTP/1.1 200 OK
+   Date: $http_date
+   Server: Eye of Terror
+   Content-Type: text/html; charset=UTF-8
+   Content-Length: $body_length
+   Connection: close
    EOF
+
+   $response_head =~ s/\n/$CRLF/g;
    
    select ($cl_sock);
    $| = 1;
-   print $response;
+   print $response_head, $CRLF, $markup;
    
    select (STDOUT);
    
