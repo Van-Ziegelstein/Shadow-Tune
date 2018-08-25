@@ -68,7 +68,7 @@ Print the help dialogue to the console.
 
 | The browser interface | Updating resources.assets of Shadowrun Hong Kong | 
 | --- | --- | 
-| <img src="screenshots/shadow_tune1.png" width="400" height="250"/> | <img src="screenshots/shadow_tune2.png" width="400" height="250"/> 
+| <img src="screenshots/shadow_tune1.png" width="400" height="250"> | <img src="screenshots/shadow_tune2.png" width="400" height="250"> 
 
 ## Limitations
 - The script provides no way of accessing and/or modifying individual music tracks, the only available operation
