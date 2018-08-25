@@ -5,6 +5,8 @@ use shadow_dump;
 use shadow_tools qw(detect_platform get_option help_screen);
 
 
+use strict;
+use warnings;
 use Socket qw(:DEFAULT :crlf);
 use Encode();
 use POSIX();
