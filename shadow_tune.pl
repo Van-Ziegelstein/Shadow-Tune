@@ -43,7 +43,7 @@ sub find_game_resources {
 
 sub asset_dump {
 
-    my $delimiter = qr/\x00*\x02\x00{3}\x0E\00{7}\x02\x00{3}/;
+    my $delimiter = qr/\x00*\x02\x00{3}\x0E\x00{7}\x02\x00{3}/;
     my ($op_params, $assets_content, $sound_meta_start) = @_;
     my @track_list;
     
