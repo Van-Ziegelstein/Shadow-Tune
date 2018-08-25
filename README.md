@@ -28,7 +28,7 @@ update the aforementioned metadata.
 
 *Shadow-Tune* aims to automate this replacement process. However, it is **not** a music converter and it is
 up to the user to provide a properly formatted `resources.assets.resS` file. (More information on how to create
-a custom version of this file can be found in the [wiki](https://github.com/Van-Ziegelstein/Shadow-Tune/wiki/FAQ)!)
+a custom version of this file can be found in the [wiki](https://github.com/Van-Ziegelstein/Shadow-Tune/wiki/resources.assets.resS)!)
 
 ## Why does this exist?
 *Shadow-Tune* `1.0` was originally developed as part of the effort to bring the UGC campaign [CalFree in Chains](https://steamcommunity.com/sharedfiles/filedetails/?id=1239356669)
