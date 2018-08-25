@@ -13,7 +13,7 @@ sub new {
     return bless { 
                    edition => shift,
 		   verbose => shift,
-		   platform => "linux",
+		   platform => shift,
 
                    #Some OS specific glob patterns that are used by the script to locate the Shadowrun games. 
                    install_dirs => { 
@@ -61,20 +61,20 @@ sub new {
 }
 
 
-sub detect_platform {
-
-   my $self = shift;
-
-   #We try to determine the OS by checking what platform the Perl
-   #implementation was compiled for. Linux is the fallback value.
-   if ($^O eq 'MSWin32') { $self->{platform} = "windows"; }
-
-   elsif ($^O eq 'darwin') { $self->{platform} = "mac"; }
-
-   else { $self->{platform} = "linux"; }
+sub set_platform() {
+    
+   my ($self, $platform) = @_;
+   $self->{platform} = $platform if defined $platform;
 
 }
 
+
+sub get_platform() {
+
+   my $self = shift;
+   return $self->{platform};
+
+}
 
 sub set_resS_file {
    

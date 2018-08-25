@@ -9,9 +9,19 @@ use Encode();
 use POSIX();
 
 
+sub detect_platform {
+
+   #We try to determine the OS by checking what platform the Perl
+   #implementation was compiled for. Linux is the fallback value.
+   return "windows" if $^O eq 'MSWin32'; 
+   return "mac" if $^O eq 'darwin';
+   return "linux";
+
+}
+
 sub server_setup {
 
- my $port = shift;
+ my ($port, $platform) = @_;
  my $localhost = gethostbyname("localhost") or die "Could not look up localhost.\n";
 
  socket(my $sockfd, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
@@ -77,9 +87,7 @@ sub server_setup {
 
                 if ($back_pid == 0) {
 		  
-		   my $game = shadow_dump->new("Returns", 0);    
-                   $game->detect_platform();
-                  
+		   my $game = shadow_dump->new("Returns", 0, $platform);    
                    $game->add_game_path($tagged_params{sr_install}) if defined $tagged_params{sr_install};
 
                    $game->set_resS_file($tagged_params{new_resS}) if defined $tagged_params{new_resS};
@@ -232,7 +240,9 @@ sub help_screen {
 }
 
 
+
 my $port = 49003;
+my $platform = detect_platform();
 
 until (@ARGV == 0) {
 
@@ -249,5 +259,5 @@ print "Listening on port: $port\n";
 fork and exit;
 print "Forked to background, pid = $$\n";
 
-server_setup($port);
+server_setup($port, $platform);
 
