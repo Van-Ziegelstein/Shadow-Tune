@@ -197,7 +197,7 @@ sub content_display {
    
    my $response_head = <<~"EOF";
    HTTP/1.1 200 OK
-   Server: Eye of Terror
+   Server: Shadow Tune
    Content-Type: text/html; charset=UTF-8
    Content-Length: $body_length
    Connection: close
