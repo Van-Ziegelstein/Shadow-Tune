@@ -142,7 +142,7 @@ sub request_parser {
 
      if (defined $req_params{content_length}) {
   
-         if ($req_params{content_length} <= 2000 ) { 
+         if ($req_params{content_length} <= 700 ) { 
      
              read($cl_sock, $req_params{query}, $req_params{content_length});
 
