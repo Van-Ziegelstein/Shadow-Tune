@@ -233,14 +233,14 @@ die "Invalid port selection.\n" unless $port =~ /^\d+$/ &&
 $port > 0 && $port <= 65535;
 
 my $browser = shadow_browse->new("http://localhost:$port");
-print "Listening on port: $port\n";
 
 my $serv_pid = fork();
 die "Server fork failed\n" unless defined $serv_pid;
 
 if ($serv_pid == 0) {
 
-    print "Starting server daemon, pid = $$\n";
+    print "Starting server daemon, pid = $$\n",
+          "Listening on port: $port\n";
     server_setup($port);
 }
 
