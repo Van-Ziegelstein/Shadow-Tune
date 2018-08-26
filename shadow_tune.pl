@@ -10,8 +10,6 @@ use strict;
 use warnings;
 use Socket qw(:DEFAULT :crlf);
 use Encode();
-use POSIX();
-
 
 
 sub server_setup {
@@ -196,11 +194,9 @@ sub content_display {
    my $markup = shift;
    
    my $body_length = length(Encode::encode_utf8($markup)); 
-   my $http_date =  POSIX::strftime("%a, %d %b %Y %R:%S GMT", gmtime);
    
    my $response_head = <<~"EOF";
    HTTP/1.1 200 OK
-   Date: $http_date
    Server: Eye of Terror
    Content-Type: text/html; charset=UTF-8
    Content-Length: $body_length
