@@ -4,18 +4,7 @@ use strict;
 use warnings;
 
 use Exporter 'import';
-our @EXPORT_OK = qw(detect_platform get_option help_screen);
-
-
-sub detect_platform {
-
-   #We try to determine the OS by checking what platform the Perl
-   #implementation was compiled for. Linux is the fallback value.
-   return "windows" if $^O eq 'MSWin32' || $^O eq 'cygwin'; 
-   return "mac" if $^O eq 'darwin';
-   return "linux";
-
-}
+our @EXPORT_OK = qw(get_option help_screen);
 
 
 sub get_option {

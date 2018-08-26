@@ -11,7 +11,6 @@ sub new {
 
     return bless {
 
-                  platform => shift,
                   url => shift,
 		  cmd => undef,
 
@@ -32,9 +31,9 @@ sub new {
 			   "chromium-browser"
 		       ],
 
-		       windows => "start",
+		       MSWin32 => "start",
 		     
-		       mac => "/usr/bin/open"
+		       darwin => "/usr/bin/open"
 
 		  },
 
@@ -49,10 +48,10 @@ sub start_browser() {
 
     my $self = shift;
 
-    foreach my $cmd (@{$self->{os_cmds}{$self->{platform}}}) {
+    foreach my $cmd (@{$self->{os_cmds}{$^O}}) {
 
 	    $self->{cmd} = $cmd;
-            last if $self->{platform} eq "windows" || $self->{platform} eq "mac";
+            last if $^O eq "MSWin32" || $^O eq "darwin";
 	    $self->{cmd} = __find_exe($self->{cmd});
 	    last if $self->{cmd};
 

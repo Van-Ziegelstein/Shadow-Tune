@@ -3,7 +3,7 @@
 use lib 'modules';
 use shadow_dump;
 use shadow_browse;
-use shadow_tools qw(detect_platform get_option help_screen);
+use shadow_tools qw(get_option help_screen);
 
 
 use strict;
@@ -16,7 +16,7 @@ use POSIX();
 
 sub server_setup {
 
- my ($port, $platform) = @_;
+ my $port = shift;
  my $localhost = gethostbyname("localhost") or die "Could not look up localhost.\n";
 
  socket(my $sockfd, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
@@ -82,7 +82,7 @@ sub server_setup {
 
                 if ($back_pid == 0) {
 		  
-		   my $game = shadow_dump->new("Returns", 0, $platform);    
+		   my $game = shadow_dump->new("Returns", 0);    
                    $game->add_game_path($tagged_params{sr_install}) if defined $tagged_params{sr_install};
 
                    $game->set_resS_file($tagged_params{new_resS}) if defined $tagged_params{new_resS};
@@ -212,8 +212,12 @@ sub content_display {
 
 
 
+die "This platform seems to be unsupported.\n" unless 
+$^O eq "linux" ||
+$^O eq "MSWin32" ||
+$^O eq "darwin";
+
 my $port = 49003;
-my $platform = detect_platform();
 
 until (@ARGV == 0) {
 
@@ -225,7 +229,7 @@ until (@ARGV == 0) {
 
 }
 
-my $browser = shadow_browse->new($platform,"http://localhost:$port");
+my $browser = shadow_browse->new("http://localhost:$port");
 print "Listening on port: $port\n";
 
 my $serv_pid = fork();
@@ -234,7 +238,7 @@ die "Server fork failed\n" unless defined $serv_pid;
 if ($serv_pid == 0) {
 
     print "Starting server daemon, pid = $$\n";
-    server_setup($port, $platform);
+    server_setup($port);
 }
 
 $browser->start_browser();

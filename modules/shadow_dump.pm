@@ -13,7 +13,6 @@ sub new {
     return bless { 
                    edition => shift,
 		   verbose => shift,
-		   platform => shift,
 
                    #Some OS specific glob patterns that are used by the script to locate the Shadowrun games. 
                    install_dirs => { 
@@ -27,14 +26,14 @@ sub new {
 
 		               ],                
 
-                      windows => [
+                      MSWin32 => [
                                                  
 	                   "c:/Program Files{, (x86)}/{,Steam/steamapps/common/}Shadowrun*",
 		           "c:/GOG Games/Shadowrun*"
  
 		                 ],
 
-                      mac => [ 
+                      darwin => [ 
 		   
 		           "~/Library/Application Support/Steam/SteamApps/common/Shadowrun*"
                                                     
@@ -60,21 +59,6 @@ sub new {
 
 }
 
-
-sub set_platform() {
-    
-   my ($self, $platform) = @_;
-   $self->{platform} = $platform if defined $platform;
-
-}
-
-
-sub get_platform() {
-
-   my $self = shift;
-   return $self->{platform};
-
-}
 
 sub set_resS_file {
    
@@ -124,7 +108,7 @@ sub get_verbose {
 sub add_game_path {
 
     my ($self, $path) = @_;
-    unshift(@{$self->{install_dirs}{$self->{platform}}}, $path) if defined $path;
+    unshift(@{$self->{install_dirs}{$^O}}, $path) if defined $path;
 
 }
 
@@ -138,7 +122,7 @@ sub find_game {
     
     $self->{edition} =~ s/Hongkong/Hong\ Kong/;
 
-    PATH_TRIAL: foreach my $path_expr (@{$self->{install_dirs}{$self->{platform}}}) {
+    PATH_TRIAL: foreach my $path_expr (@{$self->{install_dirs}{$^O}}) {
 
         foreach my $path (bsd_glob("$path_expr")) {
 
