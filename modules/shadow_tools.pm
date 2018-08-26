@@ -11,7 +11,7 @@ sub detect_platform {
 
    #We try to determine the OS by checking what platform the Perl
    #implementation was compiled for. Linux is the fallback value.
-   return "windows" if $^O eq 'MSWin32'; 
+   return "windows" if $^O eq 'MSWin32' || $^O eq 'cygwin'; 
    return "mac" if $^O eq 'darwin';
    return "linux";
 
