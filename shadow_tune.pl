@@ -2,6 +2,7 @@
 
 use lib 'modules';
 use shadow_dump;
+use shadow_browse;
 use shadow_tools qw(detect_platform get_option help_screen);
 
 
@@ -224,10 +225,17 @@ until (@ARGV == 0) {
 
 }
 
+my $browser = shadow_browse->new($platform,"http://localhost:$port");
 print "Listening on port: $port\n";
 
-fork and exit;
-print "Forked to background, pid = $$\n";
+my $serv_pid = fork();
+die "Server fork failed\n" unless defined $serv_pid;
 
-server_setup($port, $platform);
+if ($serv_pid == 0) {
+
+    print "Starting server daemon, pid = $$\n";
+    server_setup($port, $platform);
+}
+
+$browser->start_browser();
 
