@@ -112,7 +112,7 @@ sub server_setup {
 
        }
 
-       CLOSE_CONNECTION: close($cl_sockfd);
+       close($cl_sockfd);
        
     }
     
