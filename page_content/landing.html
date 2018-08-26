@@ -153,6 +153,8 @@
 
 	  }
 
+	  query_string = query_string.replace(/\s+/g, "+");
+
           return query_string.slice(0, -1);    
      }
 
