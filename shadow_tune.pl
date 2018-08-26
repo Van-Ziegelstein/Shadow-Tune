@@ -17,7 +17,7 @@ sub find_game_resources {
     
     $op_params->{edition} =~ s/Hongkong/Hong\ Kong/;
 
-    PATH_TRIAL: foreach my $path_expr (@{$op_params->{install_dirs}{$op_params->{platform}}}) {
+    PATH_TRIAL: foreach my $path_expr (@{$op_params->{install_dirs}{$^O}}) {
 
         foreach my $path (bsd_glob("$path_expr")) {
 
@@ -255,14 +255,14 @@ if ( @ARGV != 0) {
 
 		            ],                
 
-                   windows => [
+                   MSWin32 => [
                                                  
 	                 "c:/Program Files{, (x86)}/{,Steam/steamapps/common/}Shadowrun*",
 		         "c:/GOG Games/Shadowrun*"
  
 		              ],
 
-                   mac => [ 
+                   darwin => [ 
 		   
 		         "~/Library/Application Support/Steam/SteamApps/common/Shadowrun*"
                                                     
@@ -288,12 +288,10 @@ if ( @ARGV != 0) {
 
    #We try to determine the OS by checking what platform the Perl
    #implementation was compiled for. Linux is the fallback value.
-   if ($^O eq 'MSWin32') { $op_params{platform} = "windows"; }
-
-   elsif ($^O eq 'darwin') { $op_params{platform} = "mac"; }
-
-   else { $op_params{platform} = "linux"; }
-	   
+   die "This platform seems to be unsupported.\n" unless 
+   $^O eq 'MSWin32' ||
+   $^O eq 'darwin' ||
+   $^O eq 'linux'; 	   
 
    until (@ARGV == 0) {
 
@@ -311,7 +309,7 @@ if ( @ARGV != 0) {
                                    get_option();
                                    chomp($ARGV[0]); 
 				   $ARGV[0] =~ s/\/$//;
-				   unshift(@{$op_params{install_dirs}{$op_params{platform}}}, $ARGV[0]); 
+				   unshift(@{$op_params{install_dirs}{$^O}}, $ARGV[0]); 
 				 }
 
        elsif ($ARGV[0] =~ /-e/i) { get_option(); chomp($op_params{edition} = "\L$ARGV[0]"); }
