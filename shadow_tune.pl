@@ -287,7 +287,8 @@ if ( @ARGV != 0) {
 
 
    #We try to determine the OS by checking what platform the Perl
-   #implementation was compiled for. Linux is the fallback value.
+   #implementation was compiled for.
+   #Only Windows, Mac and Linux are supported.
    die "This platform seems to be unsupported.\n" unless 
    $^O eq 'MSWin32' ||
    $^O eq 'darwin' ||
