@@ -251,5 +251,9 @@ if ($serv_pid == 0) {
     server_setup($port);
 }
 
-warn "Could not find the default browser.\n" unless $browser->start_browser();
+my $findings = $browser->start_browser();
+warn "Could not locate default browser.\n" unless defined $findings;
+
+
+
 
