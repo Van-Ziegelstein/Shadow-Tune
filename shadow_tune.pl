@@ -229,7 +229,8 @@ until (@ARGV == 0) {
 
 }
 
-die "Invalid port selection.\n" unless $port =~ /^[1-65535]$/;
+die "Invalid port selection.\n" unless $port =~ /^\d+$/ &&
+$port > 0 && $port <= 65535;
 
 my $browser = shadow_browse->new("http://localhost:$port");
 print "Listening on port: $port\n";
