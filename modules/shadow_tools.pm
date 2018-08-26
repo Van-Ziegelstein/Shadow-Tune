@@ -10,7 +10,7 @@ our @EXPORT_OK = qw(get_option help_screen);
 sub get_option {
     
    shift @ARGV;
-   die "Error, option without a value detected.\n" unless @ARGV != 0 && $ARGV[0] !~ /-+\w/; 
+   die "Error, option without a value detected.\n" unless @ARGV != 0 && $ARGV[0] !~ /^-+[a-zA-Z]+$/; 
 
 }
 
