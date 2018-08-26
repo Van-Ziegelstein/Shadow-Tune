@@ -244,5 +244,5 @@ if ($serv_pid == 0) {
     server_setup($port);
 }
 
-$browser->start_browser();
+warn "Could not find the default browser.\n" unless $browser->start_browser();
 
