@@ -49,12 +49,13 @@ sub server_setup {
   
        my %tagged_params = request_parser($cl_sockfd, \@req_params); 
        
-       print $cl_sockfd "HTTP/1.1 400 Bad Request", $CRLF x 2 unless 
-       defined $tagged_params{method} && 
-       $tagged_params{bad_input} == 0;
+       if (! defined $tagged_params{method} || $tagged_params{bad_input} == 1) {
 
+           print $cl_sockfd "HTTP/1.1 400 Bad Request", $CRLF x 2,
+	                    "Can't process request.\nPlease check your input fields for special characters.\n";
+       }        
 
-       if ($tagged_params{method} eq "GET") {  
+       elsif ($tagged_params{method} eq "GET") {  
                    
              if ($tagged_params{url_path} eq "/help") { content_display($cl_sockfd, help_screen()); }
 
@@ -110,6 +111,12 @@ sub server_setup {
 
              }       
 
+       }
+
+       else {
+
+            print $cl_sockfd "HTTP/1.1 405 Method Not Allowed", $CRLF x 2,
+	                     "This action is unsupported by this server.\n"; 
        }
 
        close($cl_sockfd);
