@@ -31,9 +31,9 @@ sub new {
 			   "chromium-browser"
 		       ],
 
-		       MSWin32 => "start",
+		       MSWin32 => [ "start" ],
 		     
-		       darwin => "/usr/bin/open"
+		       darwin => [ "/usr/bin/open" ]
 
 		  },
 
