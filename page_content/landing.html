@@ -48,10 +48,15 @@
        margin-bottom: 0px;
     }
 
-    #help_button {
+    #meta_buttons {
      
        margin-top: 100px;
        float: right;
+    }
+
+    #meta_buttons > button {
+
+        margin-top: 10px;
     }
 
     .text_button {
@@ -60,6 +65,7 @@
        border-color: #10EEEE;
        color: #10EEEE;
        background-color: transparent;
+       display: block;
     }
     
     .text_button:hover {
@@ -69,7 +75,7 @@
 
     #warn_msg {
   
-       margin-top: 200px;
+       margin-top: 280px;
        margin-left: 100px;
     }
 
@@ -90,42 +96,48 @@
  </head>
  <body>
 
-  <h1>Shadow Tune</h1>
+  <div id="main_display">
 
-  <div id="help_button"><button type="button" class="text_button" onclick="get_help()">Help</button></div>
-  
-  <div id="warn_msg"></div>
-  
-  <form id="shadow_form">
-    
-    <span>Path to Shadowrun game folder:</span><input type="text" name="sr_install"><br>
-    
-    <span>New resources.assets.resS file:</span><input type="text" name="new_resS"><br>
-    
-    <p class="subsection">Action:</p><br>
-      
-       <input type="radio" name="action" value="swap" checked>Replace<br>
-      
-       <input type="radio" name="action" value="restore">Restore<br>
-    
-    <p class="subsection">Shadowrun game:</p><br>
-      
-       <input type="radio" name="edition" value="Returns" checked>Shadowrun Returns<br>
-      
-       <input type="radio" name="edition" value="Dragonfall">Shadowrun Dragonfall<br>
-      
-       <input type="radio" name="edition" value="Hongkong">Shadowrun Hong Kong<br>
-    
-    <p class="subsection">Other options:</p><br>
-      
-      <input type="checkbox" name="verbose" value=1>Verbose output<br>  
-    
-    <input type="submit" class="text_button" value="Go">
-  
-  </form>
+   <h1>Shadow Tune</h1>
 
-  <div id="action_box"></div>
+   <div id="meta_buttons">
+        <button type="button" class="text_button" onclick="get_help()">Help</button>
+        <button type="button" class="text_button" onclick="terminate()">Back to the shadows</button>
+   </div>
   
+   <div id="warn_msg"></div>
+  
+   <form id="shadow_form">
+    
+     <span>Path to Shadowrun game folder:</span><input type="text" name="sr_install"><br>
+    
+     <span>New resources.assets.resS file:</span><input type="text" name="new_resS"><br>
+    
+     <p class="subsection">Action:</p><br>
+      
+        <input type="radio" name="action" value="swap" checked>Replace<br>
+      
+        <input type="radio" name="action" value="restore">Restore<br>
+    
+     <p class="subsection">Shadowrun game:</p><br>
+      
+        <input type="radio" name="edition" value="Returns" checked>Shadowrun Returns<br>
+      
+        <input type="radio" name="edition" value="Dragonfall">Shadowrun Dragonfall<br>
+      
+        <input type="radio" name="edition" value="Hongkong">Shadowrun Hong Kong<br>
+    
+     <p class="subsection">Other options:</p><br>
+      
+       <input type="checkbox" name="verbose" value=1>Verbose output<br>  
+    
+     <input type="submit" class="text_button" value="Go">
+  
+   </form>
+
+   <div id="action_box"></div>
+  
+  </div>
   <script>
      
      function toggle_box() { document.getElementById("action_box").style.display = "block"; }
@@ -141,6 +153,20 @@
           });
           xhreq.open("GET", "/help", true);
           xhreq.send();
+     }
+
+     function terminate() {
+
+          var xhreq = new XMLHttpRequest();
+	  xhreq.addEventListener("load", function(event) {
+          
+                   document.getElementById("main_display").innerHTML = this.responseText;
+               
+          });
+          xhreq.open("GET", "/SESSIONKEY", true);
+          xhreq.send();
+
+
      }
 
      function create_query(form_obj) {

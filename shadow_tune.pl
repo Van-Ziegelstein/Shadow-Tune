@@ -10,11 +10,13 @@ use strict;
 use warnings;
 use Socket qw(:DEFAULT :crlf);
 use Encode();
+use Digest::MD5 qw(md5_hex);
+use Sys::Hostname;
 
 
 sub server_setup {
 
- my $port = shift;
+ my ($port, $session_key) = @_;
  my $localhost = gethostbyname("localhost") or die "Could not look up localhost.\n";
 
  socket(my $sockfd, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
@@ -57,7 +59,14 @@ sub server_setup {
                    
              if ($tagged_params{url_path} eq "/help") { content_display($cl_sockfd, help_screen()); }
 
-             else { content_display($cl_sockfd, fetch_page()); }
+	     elsif ($tagged_params{url_path} eq "/$session_key") { 
+	     
+		print $cl_sockfd "<h1>Safe running, Chummer!</h1>";
+	        close($cl_sockfd);
+		last;
+	     }
+
+             else { content_display($cl_sockfd, fetch_page($session_key)); }
        }
        
        elsif ($tagged_params{method} eq "POST") {
@@ -176,6 +185,7 @@ sub request_parser {
 
 sub fetch_page {
 
+  my $session_key = shift;
   my $page_content;
 
   open(my $page_fd, "<", "page_content/landing.html") or die "Can't open page document.\n";
@@ -183,6 +193,8 @@ sub fetch_page {
   while (<$page_fd>) { $page_content .= $_; }
 
   close($page_fd);
+
+  $page_content =~ s/SESSIONKEY/$session_key/e;
   return $page_content;  
   
 }
@@ -235,6 +247,7 @@ until (@ARGV == 0) {
 die "Invalid port selection.\n" unless $port =~ /^\d+$/ &&
 $port > 0 && $port <= 65535;
 
+my $session_key = md5_hex(hostname . rand(1000));
 my $browser = shadow_browse->new("http://localhost:$port");
 
 my $serv_pid = fork();
@@ -244,12 +257,13 @@ if ($serv_pid == 0) {
 
     print "Starting server daemon, pid = $$\n",
           "Listening on port: $port\n";
-    server_setup($port);
+    server_setup($port, $session_key);
+    exit 0;
 }
 
 my $findings = $browser->start_browser();
 warn "Could not locate default browser.\n" unless defined $findings;
 
-
+wait();
 
 
