@@ -160,7 +160,10 @@
           var xhreq = new XMLHttpRequest();
 	  xhreq.addEventListener("load", function(event) {
           
-                   document.getElementById("main_display").innerHTML = this.responseText;
+	           var text_area = document.getElementById("main_display");
+                   
+		   Object.assign(text_area.style, {position: "absolute", top: "50%", left: "50%", transform: "translateX(-50%) translateY(-50%)"});
+                   text_area.innerHTML = this.responseText;
                
           });
           xhreq.open("GET", "/SESSIONKEY", true);
