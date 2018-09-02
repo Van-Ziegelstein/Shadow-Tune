@@ -247,7 +247,7 @@ until (@ARGV == 0) {
 die "Invalid port selection.\n" unless $port =~ /^\d+$/ &&
 $port > 0 && $port <= 65535;
 
-my $session_key = md5_hex(hostname . rand(1000));
+my $session_key = md5_hex(hostname() . rand(1000));
 my $browser = shadow_browse->new("http://localhost:$port");
 
 my $serv_pid = fork();
