@@ -18,6 +18,7 @@ sub server_setup {
 
   my ($port, $session_key) = @_;
   my $localhost = gethostbyname("localhost") or die "Could not look up localhost.\n";
+  my $cl_addr;
 
   socket(my $serv_sock, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
   setsockopt($serv_sock, SOL_SOCKET, SO_REUSEADDR, 1);
@@ -25,12 +26,19 @@ sub server_setup {
   bind ($serv_sock, sockaddr_in($port, $localhost)) 
   or die "Failed to bind to socket!\n";
   listen($serv_sock, 5);
+
+
+  print "Server daemon initialized on port $port\n",
+        "Key: $session_key\n\n";
  
- 
-  while (accept(my $cl_sock, $serv_sock)) {
+  while ($cl_addr = accept(my $cl_sock, $serv_sock)) {
  
         my @req_params;
         my $l_count = 0;
+	my $cl_ip = unpack_sockaddr_in($cl_addr);
+
+	print ">>> New connection from " . inet_ntoa($cl_ip) . " <<<\n\n",
+	      "---Request header---\n";
 
         local($/) = LF;
 
@@ -40,17 +48,22 @@ sub server_setup {
               last if /^\n/ || $l_count == 25;      
                
               push(@req_params, $_);
+	      print;
               $l_count++;
                   
         }
+
+	print "---End header---\n\n";
   
         my %tagged_params = request_parser($cl_sock, \@req_params); 
        
         unless ($tagged_params{method} && $tagged_params{bad_input} == 0) {
 
+	       print "Malformed header or request body.\n\n";
+
                print $cl_sock "HTTP/1.1 400 Bad Request", $CRLF x 2,
-	                        "Can't process request.\n",
-				"Please check your input fields for special characters.\n";
+	                      "Can't process request.\n",
+			      "Please check your input fields for special characters.\n";
         }        
 
         if ($tagged_params{method} eq "GET") {  
@@ -72,17 +85,21 @@ sub server_setup {
              
 	      if ($tagged_params{length_exceeded} == 1) {
                 
+		 print "Maximum payload length exceeded.\n\n";
 	         print $cl_sock "HTTP/1.1 413 Payload Too Large", $CRLF x 2;
 
 	      }
              
 	      elsif ($tagged_params{length_missing} == 1) {
                 
+		    print "Payload length missing from header.\n\n";
 		    print $cl_sock "HTTP/1.1 411 Length Required", $CRLF x 2;
 
 	      }
 
 	      else {
+
+                   print "POST query: $tagged_params{query}\n\n";
 
                    my $back_pid = fork();
 		   die "Backend fork failed.\n" unless defined $back_pid;
@@ -121,16 +138,17 @@ sub server_setup {
 
              }       
 
-      }
+       }
 
-      else {
+       else {
 
+	    print "Unknown method requested.\n\n";
             print $cl_sock "HTTP/1.1 405 Method Not Allowed", $CRLF x 2,
 	                   "This action is unsupported by this server.\n"; 
-      }
+       }
 
-      close($cl_sock);
-       
+       close($cl_sock);
+       print ">>> closed <<<\n\n"; 
   }
  
   close($serv_sock);
@@ -256,9 +274,12 @@ die "Server fork failed\n" unless defined $serv_pid;
 
 if ($serv_pid == 0) {
 
-    print "Starting server daemon, pid = $$\n",
-          "Listening on port: $port\n";
+    open(STDOUT, ">", "shadowlog.txt");
+    open(STDERR, ">&STDOUT");
+
     server_setup($port, $session_key);
+
+    print "Server terminated\n";
     exit 0;
 }
 
