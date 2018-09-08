@@ -268,7 +268,7 @@ sub music_replace {
 
    my $self = shift;
    
-   die "You must give a valid path to a new resources.assets.resS file.\n" 
+   die "Unable to locate new resources.assets.resS file.\n" 
    unless defined $self->{new_resS_file} 
    && -s $self->{new_resS_file};
 
