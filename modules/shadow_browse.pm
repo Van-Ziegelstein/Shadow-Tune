@@ -28,6 +28,7 @@ sub new {
                            "firefox",
 			   "opera",
 			   "google-chrome",
+			   "chromium",
 			   "chromium-browser"
 		       ],
 
