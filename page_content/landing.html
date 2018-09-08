@@ -172,13 +172,20 @@
 
      }
 
-     function create_query(form_obj) {
+     function create_query(form) {
               
 	  var query_string = "";
 
-	  for (var form_item of form_obj.keys()) {
+	  for (i = 0; i < form.length; i++) {
 
-              query_string += form_item + "=" + form_obj.get(form_item) + "&"; 
+              if (form.elements[i].value && form.elements[i].type != "submit") {
+
+                 if ((form.elements[i].type == "radio" || form.elements[i].type == "checkbox") && ! form.elements[i].checked)
+                    continue;
+
+                 query_string += form.elements[i].name + "=" + form.elements[i].value + "&"; 
+
+	      } 
 
 	  }
 
@@ -190,8 +197,7 @@
      function send_form () {
 
           var xhreq = new XMLHttpRequest();
-          var form_content = new FormData(document.getElementById("shadow_form"));
-	  var query = create_query(form_content);
+	  var query = create_query(document.getElementById("shadow_form"));
 
           xhreq.addEventListener("load", function(event) {
                toggle_box();
