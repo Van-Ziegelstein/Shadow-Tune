@@ -61,7 +61,7 @@ sub server_setup {
 
 	     elsif ($tagged_params{url_path} eq "/$session_key") { 
 	     
-		print $cl_sockfd "<h1>Safe running, Chummer!</h1>";
+		content_display($cl_sockfd, "<h1>Safe running, Chummer!</h1>");
 	        close($cl_sockfd);
 		last;
 	     }
@@ -103,6 +103,10 @@ sub server_setup {
                    open(STDOUT, ">&=", $cl_sockfd);
                    $| = 1;
                    open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
+		   print "HTTP/1.1 200 OK", 
+		         $CRLF, 
+			 "Content-Type: text/html; charset=UTF-8", 
+			 $CRLF x 2;
 
 	           if (defined $tagged_params{action} && $tagged_params{action} eq "swap") { $game->music_replace(); } 
 
