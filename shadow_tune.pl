@@ -16,127 +16,124 @@ use Sys::Hostname;
 
 sub server_setup {
 
- my ($port, $session_key) = @_;
- my $localhost = gethostbyname("localhost") or die "Could not look up localhost.\n";
+  my ($port, $session_key) = @_;
+  my $localhost = gethostbyname("localhost") or die "Could not look up localhost.\n";
 
- socket(my $sockfd, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
- setsockopt($sockfd, SOL_SOCKET, SO_REUSEADDR, 1);
+  socket(my $serv_sock, PF_INET, SOCK_STREAM, getprotobyname('tcp'));
+  setsockopt($serv_sock, SOL_SOCKET, SO_REUSEADDR, 1);
 
- bind ($sockfd, sockaddr_in($port, $localhost)) 
- or die "Failed to bind to socket!\n";
- listen($sockfd, 5);
+  bind ($serv_sock, sockaddr_in($port, $localhost)) 
+  or die "Failed to bind to socket!\n";
+  listen($serv_sock, 5);
  
  
- while (1) {
+  while (accept(my $cl_sock, $serv_sock)) {
  
-  
-    if (my $client_addr = accept(my $cl_sockfd, $sockfd)) {
-  
-       my @req_params;
-       my $l_count = 0;
+        my @req_params;
+        my $l_count = 0;
 
-       local($/) = LF;
+        local($/) = LF;
 
-       while (<$cl_sockfd>) {
+        while (<$cl_sock>) {
 
-           s/$CR?$LF/\n/;
-           last if /^\n/ || $l_count == 25;      
+              s/$CR?$LF/\n/;
+              last if /^\n/ || $l_count == 25;      
                
-           push(@req_params, $_);
-           $l_count++;
+              push(@req_params, $_);
+              $l_count++;
                   
-       }
+        }
   
-       my %tagged_params = request_parser($cl_sockfd, \@req_params); 
+        my %tagged_params = request_parser($cl_sock, \@req_params); 
        
-       unless ($tagged_params{method} && $tagged_params{bad_input} == 0) {
+        unless ($tagged_params{method} && $tagged_params{bad_input} == 0) {
 
-           print $cl_sockfd "HTTP/1.1 400 Bad Request", $CRLF x 2,
-	                    "Can't process request.\nPlease check your input fields for special characters.\n";
-       }        
+               print $cl_sock "HTTP/1.1 400 Bad Request", $CRLF x 2,
+	                        "Can't process request.\n",
+				"Please check your input fields for special characters.\n";
+        }        
 
-       elsif ($tagged_params{method} eq "GET") {  
+        if ($tagged_params{method} eq "GET") {  
                    
-             if ($tagged_params{url_path} eq "/help") { content_display($cl_sockfd, help_screen()); }
+           if ($tagged_params{url_path} eq "/help") { content_display($cl_sock, help_screen()); }
 
-	     elsif ($tagged_params{url_path} eq "/$session_key") { 
+           elsif ($tagged_params{url_path} eq "/$session_key") { 
 	     
-		content_display($cl_sockfd, "<h1>Safe running, Chummer!</h1>");
-	        close($cl_sockfd);
-		last;
-	     }
+	         content_display($cl_sock, "<h1>Safe running, Chummer!</h1>");
+	         close($cl_sock);
+	         last;
+	   }
 
-             else { content_display($cl_sockfd, fetch_page($session_key)); }
-       }
+           else { content_display($cl_sock, fetch_page($session_key)); }
+
+        }
        
-       elsif ($tagged_params{method} eq "POST") {
+        elsif ($tagged_params{method} eq "POST") {
              
-	     if ($tagged_params{length_exceeded} == 1) {
+	      if ($tagged_params{length_exceeded} == 1) {
                 
-		print $cl_sockfd "HTTP/1.1 413 Payload Too Large", $CRLF x 2;
+	         print $cl_sock "HTTP/1.1 413 Payload Too Large", $CRLF x 2;
 
-	     }
+	      }
              
-	     elsif ($tagged_params{length_missing} == 1) {
+	      elsif ($tagged_params{length_missing} == 1) {
                 
-		print $cl_sockfd "HTTP/1.1 411 Length Required", $CRLF x 2;
+		    print $cl_sock "HTTP/1.1 411 Length Required", $CRLF x 2;
 
-	     }
+	      }
 
-	     else {
+	      else {
 
-                my $back_pid = fork();
-		die "Backend fork failed.\n" unless defined $back_pid;
+                   my $back_pid = fork();
+		   die "Backend fork failed.\n" unless defined $back_pid;
 
-                if ($back_pid == 0) {
+                   if ($back_pid == 0) {
 		  
-		   my $game = shadow_dump->new("Returns", 0);    
-                   $game->add_game_path($tagged_params{sr_install}) if $tagged_params{sr_install};
+		      my $game = shadow_dump->new("Returns", 0);    
+                      $game->add_game_path($tagged_params{sr_install}) if $tagged_params{sr_install};
 
-                   $game->set_resS_file($tagged_params{new_resS}) if $tagged_params{new_resS};
+                      $game->set_resS_file($tagged_params{new_resS}) if $tagged_params{new_resS};
 
-	           $game->set_edition($tagged_params{edition}) if $tagged_params{edition};
+	              $game->set_edition($tagged_params{edition}) if $tagged_params{edition};
 
-	           $game->set_verbose($tagged_params{verbose}) if $tagged_params{verbose};
+	              $game->set_verbose($tagged_params{verbose}) if $tagged_params{verbose};
 
 		 
-                   open(STDOUT, ">&=", $cl_sockfd);
-                   $| = 1;
-                   open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
-		   print "HTTP/1.1 200 OK", 
-		         $CRLF, 
-			 "Content-Type: text/html; charset=UTF-8", 
-			 $CRLF x 2;
+                      open(STDOUT, ">&=", $cl_sock);
+                      $| = 1;
+                      open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
+		      print "HTTP/1.1 200 OK", 
+		            $CRLF, 
+			    "Content-Type: text/html; charset=UTF-8", 
+			    $CRLF x 2;
 
-	           if ($tagged_params{action} && $tagged_params{action} eq "swap") { $game->music_replace(); } 
+	              if ($tagged_params{action} && $tagged_params{action} eq "swap") { $game->music_replace(); } 
 
-                   elsif ($tagged_params{action} && $tagged_params{action} eq "restore") { $game->music_restore(); } 
+                      elsif ($tagged_params{action} && $tagged_params{action} eq "restore") { $game->music_restore(); } 
 
-	           else { print "Invalid action.\n"; }
+	              else { print "Invalid action.\n"; }
                       
-		   exit;
+		      exit;
 
-		 }
+		   }
 
-		 wait();
+		   wait();
 
              }       
 
-       }
+      }
 
-       else {
+      else {
 
-            print $cl_sockfd "HTTP/1.1 405 Method Not Allowed", $CRLF x 2,
-	                     "This action is unsupported by this server.\n"; 
-       }
+            print $cl_sock "HTTP/1.1 405 Method Not Allowed", $CRLF x 2,
+	                   "This action is unsupported by this server.\n"; 
+      }
 
-       close($cl_sockfd);
+      close($cl_sock);
        
-    }
-    
- }
+  }
  
- close($sockfd);
+  close($serv_sock);
 
 }
 
