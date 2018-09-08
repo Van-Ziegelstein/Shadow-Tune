@@ -63,7 +63,7 @@ sub new {
 sub set_resS_file {
    
    my ($self, $resS_file) = @_;
-   $self->{new_resS_file} = bsd_glob($resS_file) if defined $resS_file;
+   $self->{new_resS_file} = bsd_glob($resS_file) if $resS_file;
 
 }
 
@@ -78,7 +78,7 @@ sub get_resS_file {
 sub set_edition {
    
    my ($self, $edition) = @_;
-   $self->{edition} = "\L$edition" if defined $edition;
+   $self->{edition} = "\L$edition" if $edition;
 
 }
 
@@ -93,7 +93,7 @@ sub get_edition {
 sub set_verbose {
    
    my ($self, $verbose) = @_;
-   $self->{verbose} = $verbose if defined $verbose;
+   $self->{verbose} = $verbose if $verbose;
 
 }
 
@@ -108,7 +108,7 @@ sub get_verbose {
 sub add_game_path {
 
     my ($self, $path) = @_;
-    unshift(@{$self->{install_dirs}{$^O}}, $path) if defined $path;
+    unshift(@{$self->{install_dirs}{$^O}}, $path) if $path;
 
 }
 
@@ -138,7 +138,7 @@ sub find_game {
     }
     
     die "Unable to locate Shadowrun $self->{edition} game assets.\n" 
-    unless defined $self->{sr_resources} && -d $self->{sr_resources}; 
+    unless $self->{sr_resources} && -d $self->{sr_resources}; 
     
     print "Found: $self->{sr_resources}\n\n";
 
@@ -269,7 +269,7 @@ sub music_replace {
    my $self = shift;
    
    die "Unable to locate new resources.assets.resS file.\n" 
-   unless defined $self->{new_resS_file} 
+   unless $self->{new_resS_file} 
    && -s $self->{new_resS_file};
 
    print "Found replacement file: $self->{new_resS_file}\n\n"; 

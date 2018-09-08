@@ -49,7 +49,7 @@ sub server_setup {
   
        my %tagged_params = request_parser($cl_sockfd, \@req_params); 
        
-       if (! defined $tagged_params{method} || $tagged_params{bad_input} == 1) {
+       unless ($tagged_params{method} && $tagged_params{bad_input} == 0) {
 
            print $cl_sockfd "HTTP/1.1 400 Bad Request", $CRLF x 2,
 	                    "Can't process request.\nPlease check your input fields for special characters.\n";
@@ -91,13 +91,13 @@ sub server_setup {
                 if ($back_pid == 0) {
 		  
 		   my $game = shadow_dump->new("Returns", 0);    
-                   $game->add_game_path($tagged_params{sr_install}) if defined $tagged_params{sr_install};
+                   $game->add_game_path($tagged_params{sr_install}) if $tagged_params{sr_install};
 
-                   $game->set_resS_file($tagged_params{new_resS}) if defined $tagged_params{new_resS};
+                   $game->set_resS_file($tagged_params{new_resS}) if $tagged_params{new_resS};
 
-	           $game->set_edition($tagged_params{edition}) if defined $tagged_params{edition};
+	           $game->set_edition($tagged_params{edition}) if $tagged_params{edition};
 
-	           $game->set_verbose($tagged_params{verbose}) if defined $tagged_params{verbose};
+	           $game->set_verbose($tagged_params{verbose}) if $tagged_params{verbose};
 
 		 
                    open(STDOUT, ">&=", $cl_sockfd);
@@ -108,9 +108,9 @@ sub server_setup {
 			 "Content-Type: text/html; charset=UTF-8", 
 			 $CRLF x 2;
 
-	           if (defined $tagged_params{action} && $tagged_params{action} eq "swap") { $game->music_replace(); } 
+	           if ($tagged_params{action} && $tagged_params{action} eq "swap") { $game->music_replace(); } 
 
-                   elsif (defined $tagged_params{action} && $tagged_params{action} eq "restore") { $game->music_restore(); } 
+                   elsif ($tagged_params{action} && $tagged_params{action} eq "restore") { $game->music_restore(); } 
 
 	           else { print "Invalid action.\n"; }
                       
@@ -156,9 +156,9 @@ sub request_parser {
   }
 
 
-  if (defined $req_params{method} && $req_params{method} eq "POST") { 
+  if ($req_params{method} && $req_params{method} eq "POST") { 
 
-     if (defined $req_params{content_length}) {
+     if ($req_params{content_length}) {
   
          if ($req_params{content_length} <= 700 ) { 
      
