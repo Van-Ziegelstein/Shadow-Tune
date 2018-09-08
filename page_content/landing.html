@@ -208,14 +208,10 @@
           xhreq.send(query);
      } 
 
-     var form = document.getElementById("shadow_form");
-
-     form.addEventListener("submit", function (event) {
+     document.getElementById("shadow_form").addEventListener("submit", function (event) {
           event.preventDefault();
 
-          var resS_field = document.forms[0]["new_resS"].value;
-
-          if (resS_field == "") {
+          if (document.forms[0]["new_resS"].value == "") {
 
                document.getElementById("warn_msg").innerHTML = "You must provide a new resources.assets.resS file!";
           } 
