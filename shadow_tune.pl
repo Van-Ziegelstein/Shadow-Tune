@@ -57,7 +57,7 @@ sub server_setup {
   
         my %tagged_params = request_parser($cl_sock, \@req_params); 
        
-        unless ($tagged_params{method} && $tagged_params{bad_input} == 0) {
+        if (! $tagged_params{method} || $tagged_params{bad_input} == 1) {
 
 	       print "Malformed header or request body.\n\n";
 
@@ -66,18 +66,18 @@ sub server_setup {
 			      "Please check your input fields for special characters.\n";
         }        
 
-        if ($tagged_params{method} eq "GET") {  
+        elsif ($tagged_params{method} eq "GET") {  
                    
-           if ($tagged_params{url_path} eq "/help") { content_display($cl_sock, help_screen()); }
+              if ($tagged_params{url_path} eq "/help") { content_display($cl_sock, help_screen()); }
 
-           elsif ($tagged_params{url_path} eq "/$session_key") { 
+              elsif ($tagged_params{url_path} eq "/$session_key") { 
 	     
-	         content_display($cl_sock, "<h1>Safe running, Chummer!</h1>");
-	         close($cl_sock);
-	         last;
-	   }
+	           content_display($cl_sock, "<h1>Safe running, Chummer!</h1>");
+	           close($cl_sock);
+	           last;
+	      }
 
-           else { content_display($cl_sock, fetch_page($session_key)); }
+              else { content_display($cl_sock, fetch_page($session_key)); }
 
         }
        
