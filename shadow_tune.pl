@@ -116,6 +116,7 @@ sub server_setup {
 	              $game->set_verbose($tagged_params{verbose}) if $tagged_params{verbose};
 
 		 
+		      local (*STDOUT, *STDERR);
                       open(STDOUT, ">&=", $cl_sock);
                       $| = 1;
                       open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
@@ -130,7 +131,7 @@ sub server_setup {
 
 	              else { print "Invalid action.\n"; }
                       
-		      exit;
+		      exit 0;
 
 		   }
 
