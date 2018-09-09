@@ -28,7 +28,7 @@ sub server_setup {
   listen($serv_sock, 5);
 
 
-  print "Server daemon initialized on port $port\n",
+  print "Server initialized on port $port\n",
         "Key: $session_key\n\n";
  
   while ($cl_addr = accept(my $cl_sock, $serv_sock)) {
