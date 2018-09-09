@@ -45,7 +45,7 @@ sub server_setup {
         while (<$cl_sock>) {
 
               s/$CR?$LF/\n/;
-              last if /^\n/ || $l_count == 25;      
+              last if /^\n/ || $l_count == 30;      
                
               push(@req_params, $_);
 	      print;
