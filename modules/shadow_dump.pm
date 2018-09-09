@@ -156,7 +156,7 @@ sub __asset_dump {
     my ($assets_content, $sound_meta_start) = @_;
     my @track_list;
     
-    print ">>> Parsed resources.assets <<<\n";
+    print "Parsed resources.assets :)\n";
 
     while ($assets_content =~ /([\w-]+)$delimiter/g) {
 
@@ -183,7 +183,7 @@ sub __resS_dump {
     my ($resS_content, $track_num) = @_;
     my @offset_list;
 
-    print ">>> Parsed resources.assets.resS replacment file <<<\n";
+    print "Parsed resources.assets.resS replacement file :)\n";
     print "\n" if $self->{verbose} == 1;
 
     while ($resS_content =~ /$ogg_first_page/g) {
@@ -209,7 +209,7 @@ sub __asset_update {
    die "Number of replacement offsets does not match original track number.\n" 
    unless @{$new_track_offsets} == @{$current_tracklist};  
    
-   print ">>> Remapped offset and size values in resources.assets <<<\n";
+   print "Remapped offset and size values in resources.assets :)\n";
 
    push (@{$new_track_offsets}, $resS_end); 
 
@@ -280,7 +280,7 @@ sub music_replace {
 
    $self->find_game(); 
 
-   die "A backup file is already present.\n" if -e "$self->{sr_resources}/resources.assets.resS.bak";
+   die "Aborted: a backup file is already present.\n" if -e "$self->{sr_resources}/resources.assets.resS.bak";
 
 
    move("$self->{sr_resources}/resources.assets.resS", "$self->{sr_resources}/resources.assets.resS.bak") 
@@ -290,7 +290,7 @@ sub music_replace {
 
    $self->__swap_music_files();
 
-   print "Done\n";
+   print "Done \\o/\n";
 
 }
 
@@ -311,7 +311,7 @@ sub music_restore {
    unlink "$self->{sr_resources}/resources.assets.resS.bak" 
    or warn "Failed to delete backup file.\n";
 
-   print "Done\n";
+   print "Done \\o/\n";
 
 }
 
