@@ -103,12 +103,16 @@ sub server_setup {
 	      else {
 
                    print "POST query: $tagged_params{query}\n\n";
+		   my $recorded_out;
 
-                   my $back_pid = fork();
-		   die "Backend fork failed.\n" unless defined $back_pid;
 
-                   if ($back_pid == 0) {
-		  
+                   do {
+		      
+		      local (*STDOUT, *STDERR);
+
+                      open(STDOUT, ">", \$recorded_out) or die "Can't redirect STDOUT to scalar.\n";
+                      open(STDERR, ">&STDOUT") or die "Can't re-open STDERR.\n";
+
 		      my $game = shadow_dump->new("Returns", 0);    
                       $game->add_game_path($tagged_params{sr_install}) if $tagged_params{sr_install};
 
@@ -117,14 +121,8 @@ sub server_setup {
 	              $game->set_edition($tagged_params{edition}) if $tagged_params{edition};
 
 	              $game->set_verbose($tagged_params{verbose}) if $tagged_params{verbose};
-
 		 
-		      local (*STDOUT, *STDERR);
-		      my $recorded_out;
-
-                      open(STDOUT, ">", \$recorded_out) or die "Can't redirect STDOUT to scalar.\n";
-                      open(STDERR, ">&STDOUT") or die "Can't re-open STDERR.\n";
-
+		      
 	              if ($tagged_params{action} && $tagged_params{action} eq "swap") { 
 		      
 		         local $@; 
@@ -141,13 +139,11 @@ sub server_setup {
 
 	              else { print "Invalid action.\n"; }
 
-		      serv_respond($cl_sock, "HTTP/1.1 200 OK", $recorded_out);
-                      
-		      exit 0;
 
-		   }
+		  };
 
-		   wait();
+		  print "---Backend message log---\n\n", $recorded_out;
+                  serv_respond($cl_sock, "HTTP/1.1 200 OK", $recorded_out);
 
              }       
 
