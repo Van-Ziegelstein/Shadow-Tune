@@ -117,19 +117,28 @@ sub server_setup {
 
 		 
 		      local (*STDOUT, *STDERR);
-                      open(STDOUT, ">&=", $cl_sock);
-                      $| = 1;
-                      open(STDERR, ">&STDOUT") or die "Can't re-open STDERR\n";
-		      print "HTTP/1.1 200 OK", 
-		            $CRLF, 
-			    "Content-Type: text/html; charset=UTF-8", 
-			    $CRLF x 2;
+		      my $recorded_out;
 
-	              if ($tagged_params{action} && $tagged_params{action} eq "swap") { $game->music_replace(); } 
+                      open(STDOUT, ">", \$recorded_out) or die "Can't redirect STDOUT to scalar.\n";
+                      open(STDERR, ">&STDOUT") or die "Can't re-open STDERR.\n";
 
-                      elsif ($tagged_params{action} && $tagged_params{action} eq "restore") { $game->music_restore(); } 
+	              if ($tagged_params{action} && $tagged_params{action} eq "swap") { 
+		      
+		         local $@; 
+			 eval { $game->music_replace(); 1; } or print $@; 
+
+		      } 
+
+                      elsif ($tagged_params{action} && $tagged_params{action} eq "restore") { 
+		      
+		            local $@; 
+			    eval { $game->music_restore(); 1; } or print $@; 
+			    
+	              } 
 
 	              else { print "Invalid action.\n"; }
+
+		      content_display($cl_sock, $recorded_out);
                       
 		      exit 0;
 
