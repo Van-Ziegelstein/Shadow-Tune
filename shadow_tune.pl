@@ -62,9 +62,9 @@ sub server_setup {
        
         if (! $tagged_params{method} || $tagged_params{bad_input} == 1) {
 
+               serv_respond($cl_sock, "HTTP/1.1 400 Bad Request", "Bad input fields.\n");
 	       print "Malformed header or request body.\n\n";
 
-               serv_respond($cl_sock, "HTTP/1.1 400 Bad Request", "Bad input fields.\n");
         }        
 
         elsif ($tagged_params{method} eq "GET") {  
@@ -73,9 +73,9 @@ sub server_setup {
 
               elsif ($tagged_params{url_path} eq "/$session_key") { 
 	     
-	           serv_respond($cl_sock, "HTTP/1.1 200 OK", "<h1>Safe running, Chummer!</h1>");
-	           close($cl_sock);
-	           last;
+	            serv_respond($cl_sock, "HTTP/1.1 200 OK", "<h1>Safe running, Chummer!</h1>");
+	            close($cl_sock);
+	            last;
 	      }
 
 	      #Catch-all rule to return the page for every GET query
@@ -88,15 +88,15 @@ sub server_setup {
              
 	      if ($tagged_params{length_exceeded} == 1) {
                 
-		 print "Maximum payload length exceeded.\n\n";
 	         serv_respond($cl_sock, "HTTP/1.1 413 Payload Too Large");
+		 print "Maximum payload length exceeded.\n\n";
 
 	      }
              
 	      elsif ($tagged_params{length_missing} == 1) {
                 
-		 print "Payload length missing from header.\n\n";
 		 serv_respond($cl_sock, "HTTP/1.1 411 Length Required");
+		 print "Payload length missing from header.\n\n";
 
 	      }
 
@@ -104,7 +104,6 @@ sub server_setup {
 
                    print "POST query: $tagged_params{query}\n\n";
 		   my $recorded_out;
-
 
                    do {
 		      
@@ -139,11 +138,10 @@ sub server_setup {
 
 	              else { print "Invalid action.\n"; }
 
-
 		  };
 
-		  print "---Backend message log---\n\n", $recorded_out;
                   serv_respond($cl_sock, "HTTP/1.1 200 OK", $recorded_out);
+		  print "---Backend message log---\n\n", $recorded_out;
 
              }       
 
@@ -152,8 +150,9 @@ sub server_setup {
        else {
 
 	    #Only GET and POST requests receive further parsing.
-	    print "Unknown method requested.\n\n";
             serv_respond($cl_sock, "HTTP/1.1 405 Method Not Allowed", "This action is unsupported by this server.\n"); 
+	    print "Unsupported method requested.\n\n";
+
        }
 
        close($cl_sock);
@@ -296,6 +295,8 @@ if ($serv_pid == 0) {
 
     open(STDOUT, ">", "shadowlog.txt");
     open(STDERR, ">&STDOUT");
+
+    print "Detected platform: $^O\n\n";
 
     server_setup($port, $session_key);
 
