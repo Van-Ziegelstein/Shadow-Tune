@@ -104,46 +104,48 @@ sub server_setup {
 
                    print "POST query: $tagged_params{query}\n\n";
 		   my $recorded_out;
+		   local $@;
 
-                   do {
+                   eval {
 		      
-		      local (*STDOUT, *STDERR);
+		        local (*STDOUT, *STDERR);
 
-                      open(STDOUT, ">", \$recorded_out) or die "Can't redirect STDOUT to scalar.\n";
-                      open(STDERR, ">&STDOUT") or die "Can't re-open STDERR.\n";
+                        open(STDOUT, ">", \$recorded_out) or die "Can't redirect STDOUT to scalar.\n";
+                        open(STDERR, ">&STDOUT") or die "Can't re-open STDERR.\n";
 
-		      my $game = shadow_dump->new("Returns", 0);    
-                      $game->add_game_path($tagged_params{sr_install}) if $tagged_params{sr_install};
+		        my $game = shadow_dump->new("Returns", 0);    
+                        $game->add_game_path($tagged_params{sr_install}) if $tagged_params{sr_install};
 
-                      $game->set_resS_file($tagged_params{new_resS}) if $tagged_params{new_resS};
+                        $game->set_resS_file($tagged_params{new_resS}) if $tagged_params{new_resS};
 
-	              $game->set_edition($tagged_params{edition}) if $tagged_params{edition};
+	                $game->set_edition($tagged_params{edition}) if $tagged_params{edition};
 
-	              $game->set_verbose($tagged_params{verbose}) if $tagged_params{verbose};
+	                $game->set_verbose($tagged_params{verbose}) if $tagged_params{verbose};
 		 
 		      
-	              if ($tagged_params{action} && $tagged_params{action} eq "swap") { 
-		      
-		         local $@; 
-			 eval { $game->music_replace(); 1; } or print $@; 
+	                if ($tagged_params{action} && $tagged_params{action} eq "swap") { $game->music_replace(); }
 
-		      } 
+                        elsif ($tagged_params{action} && $tagged_params{action} eq "restore") { $game->music_restore(); }
 
-                      elsif ($tagged_params{action} && $tagged_params{action} eq "restore") { 
-		      
-		            local $@; 
-			    eval { $game->music_restore(); 1; } or print $@; 
-			    
-	              } 
+	                else { print "Invalid action.\n"; }
 
-	              else { print "Invalid action.\n"; }
+		     } or do { 
+		  
+		             my $error = $@ || "Unknown error.\n";
+			     serv_respond($cl_sock, "HTTP/1.1 200 OK", $error);
+			     print "Failure in backend: $error\n";
+			     $recorded_out = undef;
 
-		  };
+		     };
 
-                  serv_respond($cl_sock, "HTTP/1.1 200 OK", $recorded_out);
-		  print "---Backend message log---\n\n", $recorded_out;
+		     if (defined $recorded_out) {
+                  
+		        serv_respond($cl_sock, "HTTP/1.1 200 OK", $recorded_out);
+		        print "---Backend message log---\n\n", $recorded_out;
 
-             }       
+                     }
+
+	      }       
 
        }
 
