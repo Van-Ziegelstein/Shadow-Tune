@@ -18,24 +18,27 @@ sub get_option {
 sub help_screen {
  
    my $help_text = <<~"EOF"; 
-   This is the gui version of Shadow-Tune.
-   Upon startup, the script will fork to the background
-   and start the server.
+   This is the gui version of Shadow Tune.
+   Upon startup, the script will start a tiny
+   server and attempt to locate the default browser.
 
-   ---> Startup tweaking 
+   ---Startup tweaking---
+
    Accepted commandline options:
 
       -p: Specify a port to listen on (default 49003).
       --help: Print this dialogue.
 
 
-   ---> Interface navigation
+   ---Interface navigation---
       
       Change the parameters to fit the operation 
       you want to perform. 
       
-      If the field concerning the Shadowrun game folder 
-      is left empty, the program will try to guess the path.
+      The field concerning the Shadowrun game folder 
+      can be left empty. In that case the program 
+      will try to locate the game directory using a set
+      of hardcoded paths.
 
       The "verbose" option is optional as well and can be toggled
       to get a more detailed output log.
@@ -50,8 +53,8 @@ sub help_screen {
 
       Even more important: After you're done, don't forget to hit the
       "back to the shadows" button to terminate the program. Otherwise
-      it will continue to wait for commands even after the browser 
-      is closed.
+      it will (under certain conditions) continue to wait for commands
+      even after the browser is closed.
    EOF
 
    return $help_text;
