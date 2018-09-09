@@ -44,6 +44,9 @@ sub server_setup {
 
         while (<$cl_sock>) {
 
+	      #This cumbersome substitution is necessary
+	      #due to different newline formats and the
+	      #lawless browser landscape.
               s/$CR?$LF/\n/;
               last if /^\n/ || $l_count == 30;      
                
@@ -75,6 +78,8 @@ sub server_setup {
 	           last;
 	      }
 
+	      #Catch-all rule to return the page for every GET query
+	      #not corresponding to the help or termination request.
               else { serv_respond($cl_sock, "HTTP/1.1 200 OK", fetch_page($session_key)); }
 
         }
@@ -90,8 +95,8 @@ sub server_setup {
              
 	      elsif ($tagged_params{length_missing} == 1) {
                 
-		    print "Payload length missing from header.\n\n";
-		    serv_respond($cl_sock, "HTTP/1.1 411 Length Required");
+		 print "Payload length missing from header.\n\n";
+		 serv_respond($cl_sock, "HTTP/1.1 411 Length Required");
 
 	      }
 
@@ -150,6 +155,7 @@ sub server_setup {
 
        else {
 
+	    #Only GET and POST requests receive further parsing.
 	    print "Unknown method requested.\n\n";
             serv_respond($cl_sock, "HTTP/1.1 405 Method Not Allowed", "This action is unsupported by this server.\n"); 
        }
@@ -281,7 +287,10 @@ until (@ARGV == 0) {
 die "Invalid port selection.\n" unless $port =~ /^\d+$/ &&
 $port > 0 && $port <= 65535;
 
+#Simple hash of the hostname and a number.
+#This is used as a special GET query to terminate the server.
 my $session_key = md5_hex(hostname() . rand(1000));
+
 my $browser = shadow_browse->new("http://localhost:$port");
 
 my $serv_pid = fork();

@@ -65,7 +65,6 @@ sub start_browser() {
 }
 
 
-
 sub __find_exe() {
 
     my $cmd = shift;
@@ -80,6 +79,5 @@ sub __find_exe() {
   return;
 
 }
-
 
 1;

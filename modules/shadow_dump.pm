@@ -6,6 +6,10 @@ use File::Copy;
 use File::Glob ':bsd_glob';
 use Fcntl qw( SEEK_SET SEEK_END );
 
+#If you want to use this module in your own script,
+#please remember that routines prefixed with __
+#are not intended to be called externally.
+
 sub new {
 
     my $class = shift;
