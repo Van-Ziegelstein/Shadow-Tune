@@ -61,23 +61,21 @@ sub server_setup {
 
 	       print "Malformed header or request body.\n\n";
 
-               print $cl_sock "HTTP/1.1 400 Bad Request", $CRLF x 2,
-	                      "Can't process request.\n",
-			      "Please check your input fields for special characters.\n";
+               serv_respond($cl_sock, "HTTP/1.1 400 Bad Request", "Bad input fields.\n");
         }        
 
         elsif ($tagged_params{method} eq "GET") {  
                    
-              if ($tagged_params{url_path} eq "/help") { content_display($cl_sock, help_screen()); }
+              if ($tagged_params{url_path} eq "/help") { serv_respond($cl_sock, "HTTP/1.1 200 OK", help_screen()); }
 
               elsif ($tagged_params{url_path} eq "/$session_key") { 
 	     
-	           content_display($cl_sock, "<h1>Safe running, Chummer!</h1>");
+	           serv_respond($cl_sock, "HTTP/1.1 200 OK", "<h1>Safe running, Chummer!</h1>");
 	           close($cl_sock);
 	           last;
 	      }
 
-              else { content_display($cl_sock, fetch_page($session_key)); }
+              else { serv_respond($cl_sock, "HTTP/1.1 200 OK", fetch_page($session_key)); }
 
         }
        
@@ -86,14 +84,14 @@ sub server_setup {
 	      if ($tagged_params{length_exceeded} == 1) {
                 
 		 print "Maximum payload length exceeded.\n\n";
-	         print $cl_sock "HTTP/1.1 413 Payload Too Large", $CRLF x 2;
+	         serv_respond($cl_sock, "HTTP/1.1 413 Payload Too Large");
 
 	      }
              
 	      elsif ($tagged_params{length_missing} == 1) {
                 
 		    print "Payload length missing from header.\n\n";
-		    print $cl_sock "HTTP/1.1 411 Length Required", $CRLF x 2;
+		    serv_respond($cl_sock, "HTTP/1.1 411 Length Required");
 
 	      }
 
@@ -138,7 +136,7 @@ sub server_setup {
 
 	              else { print "Invalid action.\n"; }
 
-		      content_display($cl_sock, $recorded_out);
+		      serv_respond($cl_sock, "HTTP/1.1 200 OK", $recorded_out);
                       
 		      exit 0;
 
@@ -153,8 +151,7 @@ sub server_setup {
        else {
 
 	    print "Unknown method requested.\n\n";
-            print $cl_sock "HTTP/1.1 405 Method Not Allowed", $CRLF x 2,
-	                   "This action is unsupported by this server.\n"; 
+            serv_respond($cl_sock, "HTTP/1.1 405 Method Not Allowed", "This action is unsupported by this server.\n"); 
        }
 
        close($cl_sock);
@@ -229,26 +226,34 @@ sub fetch_page {
 }
 
 
-sub content_display {
+sub serv_respond {
 
-   my $cl_sock = shift;
-   my $markup = shift;
+   my ($cl_sock, $status, $markup) = @_;
+   my $body_length;
    
-   my $body_length = length(Encode::encode_utf8($markup)); 
+   if ($markup) { $body_length = length(Encode::encode_utf8($markup)); } 
    
-   my $response_head = <<~"EOF";
-   HTTP/1.1 200 OK
+   else { $body_length = 0; } 
+
+   my $response = <<~"EOF";
+   $status
    Server: Shadow Tune
    Content-Type: text/html; charset=UTF-8
    Content-Length: $body_length
    Connection: close
    EOF
 
-   $response_head =~ s/\n/$CRLF/g;
+   #Convert platform specific newlines to the correct standard
+   #and terminate the header. 
+   $response =~ s/\n/$CRLF/g;
+   $response .= $CRLF;
+
+   #Add the content if present.
+   $response .= $markup if $markup;
    
    select ($cl_sock);
    $| = 1;
-   print $response_head, $CRLF, $markup;
+   print $response;
    
    select (STDOUT);
    
