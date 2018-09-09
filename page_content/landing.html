@@ -42,6 +42,45 @@
       margin-top: 30px;
     }
 
+    input[type=radio], input[type=checkbox] {
+
+      display: none;
+    }
+
+    input + label {
+
+      display: block;
+      margin-top: 10px;
+      margin-left: 15px;
+    }
+
+    .indicator_box {
+
+      display: inline-block;
+      box-sizing: border-box;
+      width: 1.5em;
+      height: 1.5em;
+      border-style: dashed;
+      padding: 0.25em;
+      margin-right: 10px;
+    }
+
+    input:checked + label > .indicator_box::after {
+
+      display: block;
+      content: '';
+      margin: 0 auto;
+      width: 0.6em;
+      height: 0.6em;
+      background-color: #10EEEE;
+
+    }
+
+    label > *:hover, .text_button:hover {
+
+      cursor: pointer;
+    }
+
     .subsection {
 
        margin-top: 30px;
@@ -115,21 +154,49 @@
     
      <p class="subsection">Action:</p><br>
       
-        <input type="radio" name="action" value="swap" checked>Replace<br>
+        <input type="radio" name="action" id="action1" value="swap" checked>
+	<label for="action1">
+	  <div class="indicator_box"></div>
+	  <span class="indicator_text">Replace</span>
+	</label>
       
-        <input type="radio" name="action" value="restore">Restore<br>
+        <input type="radio" name="action" id="action2" value="restore">
+
+	<label for="action2">
+	  <div class="indicator_box"></div>
+	  <span class="indicator_text">Restore</span>
+	</label>
     
      <p class="subsection">Shadowrun game:</p><br>
       
-        <input type="radio" name="edition" value="Returns" checked>Shadowrun Returns<br>
+        <input type="radio" name="edition" id="edition1" value="Returns" checked>
+	<label for="edition1">
+	  <div class="indicator_box"></div>
+	  <span class="indicator_text">Shadowrun Returns</span>
+	</label>
       
-        <input type="radio" name="edition" value="Dragonfall">Shadowrun Dragonfall<br>
+        <input type="radio" name="edition" id="edition2" value="Dragonfall">
+
+	<label for="edition2">
+	  <div class="indicator_box"></div>
+	  <span class="indicator_text">Shadowrun Dragonfall</span>
+	</label>
       
-        <input type="radio" name="edition" value="Hongkong">Shadowrun Hong Kong<br>
+        <input type="radio" name="edition" id="edition3" value="Hongkong">
+
+	<label for="edition3">
+	  <div class="indicator_box"></div>
+	  <span class="indicator_text">Shadowrun Hong Kong</span>
+	</label>
     
      <p class="subsection">Other options:</p><br>
       
-       <input type="checkbox" name="verbose" value=1>Verbose output<br>  
+        <input type="checkbox" name="verbose" id="check1" value=1>
+
+        <label for="check1">
+          <div class="indicator_box"></div>
+	  <span class="indicator_text">Verbose output</span>
+        </label>
     
      <input type="submit" class="text_button" value="Go">
   
