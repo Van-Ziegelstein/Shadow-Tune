@@ -32,7 +32,7 @@ sub new {
 
                       MSWin32 => [
                                                  
-	                   "c:/Program Files{, (x86)}/{,Steam/steamapps/common/}Shadowrun*",
+	                   "c:/Program Files{, (x86)}/{,Steam/steamapps/common/,GOG Galaxy/Games/}Shadowrun*",
 		           "c:/GOG Games/Shadowrun*"
  
 		                 ],
