@@ -63,7 +63,7 @@ open a terminal.
 ### Windows
 The source files contain a batch script. After unzipping, navigate to the "windows" folder
 and double-click the file (Windows will question its safety and given the twisted mind of 
-Shadow-Tune's maintainer it is probably right). 
+*Shadow-Tune*'s maintainer it is probably right). 
 The script will check for a Perl interpreter and launch the main program afterwards.
 (A command prompt will open. Don't be afraid.)
 
@@ -86,7 +86,7 @@ Most of the settings in the web interface should be self-explanatory. Here's a b
 of the more important ones:
 
 * `Path to Shadowrun game folder` This field can be used to enter the path to 
-the Shadowrun game that is to be modified. Shadow-Tune comes with a collection of platform-specific
+the Shadowrun game that is to be modified. *Shadow-Tune* comes with a collection of platform-specific
 default paths, and if the field is left empty, the script will fall back to those.
 
 * `New resources.assets.resS file` This is the path to the resources.assets.resS file that
@@ -117,7 +117,7 @@ user input.
 ## Screenshots
 
 | The browser interface | Replacing the soundtrack of Shadowrun Hong Kong in a Windows 10 VM | 
-| --- | --- | 
+| :---: | :---: | 
 | <img src="screenshots/shadow_tune1.png" width="400" height="250"> | <img src="screenshots/shadow_tune3.png" width="400" height="250"> |
 | **Getting Help** | **Restoring the soundtrack of Shadowrun Hong Kong in a Windows 10 VM** |
 | <img src="screenshots/shadow_tune2.png" width="400" height="250"> | <img src="screenshots/shadow_tune4.png" width="400" height="250"> |
@@ -134,7 +134,7 @@ constant otherwise the game will most certainly crash when loading nonexistent m
 
 - *Shadow-Tune* was originally developed in and for a Unix-like environment. This still holds true for the gui branch as well. Nevertheless, the "usability" on Windows has been improved with the inclusion of a batch script. In the best case scenario program launch should now be a standard click and forget action. 
 
-- A html form? Seriously? Admittedly, a browser-based user interface is not the first solution that comes to mind when thinking about a good gui. The reason for choosing this approach is that Shadow-Tune still aims at introducing as few dependencies as possible. There are solid gui frameworks for Perl but those would require the user to install additional packages. On the other hand, every OS comes with a browser. The operations Shadow-Tune is designed to carry out are still simple enough for a html form to suffice (at least I hope so). On a more historical note, Perl has its roots in web scripting anyway and graphical interfaces never were among the areas where it truly shone.
+- A html form? Seriously? Admittedly, a browser-based user interface is not the first solution that comes to mind when thinking about a good gui. The reason for choosing this approach is that *Shadow-Tune* still aims at introducing as few dependencies as possible. There are solid gui frameworks for Perl but those would require the user to install additional packages. On the other hand, every OS comes with a browser. The operations *Shadow-Tune* is designed to carry out are still simple enough for a html form to suffice (at least I hope so). On a more historical note, Perl has its roots in web scripting anyway and graphical interfaces never were among the areas where it truly shone.
 
 - Known issues so far: 
 
@@ -153,21 +153,21 @@ constant otherwise the game will most certainly crash when loading nonexistent m
   
   * This ties into the decision of not implementing persistent HTTP connections. Right now the server will close the connection
   after every response. This is of course more primitive than the modern HTTP standard demands, but it was deemed adequate for 
-  the small-scale transmissions that Shadow-Tune is going to produce over the course of a session (or at least the original
+  the small-scale transmissions that *Shadow-Tune* is going to produce over the course of a session (or at least the original
   reasoning went somewhat along those lines.) Implementing true keep-alive connections would introduce more complexity into the 
   code and it is thus still "under consideration". However, going the simpler route seems to have introduced problems as well. 
   Requests with apparently empty content have been observed after closing a connection, and with reference to the "phenomenon" 
   described above, it could be that certain browsers react with a reload request to such an event.
   
   * This is not as much an issue but a design decision: in its current shape the server is not multithreaded. As a consequence, 
-  it doesn't work through requests in parallel but in sequential order. So far this approach seems to be sufficient for Shadow-
-  Tune's transmission requirements. 
+  it doesn't work through requests in parallel but in sequential order. So far this approach seems to be sufficient for the 
+  program's transmission requirements. 
   
-  * Last but not least it should be evident from the above description that Shadow-Tune's server implementation has been 
+  * Last but not least, it should be evident from the above description that *Shadow-Tune*'s server implementation has been 
   tailored for a very specific and (more important) **local** use case. **Do not try to deploy this thing over the network**, as 
   security is not enforced in the code!
   
-  * This final point can't  be stressed enough: basic user input validation is performed, but Shadow-Tune was not designed to
+  * This final point can't  be stressed enough: basic user input validation is performed, but *Shadow-Tune* was not designed to
   operate as a CGI-script. Specifically, the working directory and environment variables are **not sanitized** to harden against
   exploitation.
 
