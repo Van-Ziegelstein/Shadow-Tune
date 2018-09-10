@@ -18,7 +18,7 @@
 
     form {
      
-      margin-top: 50px;
+      margin-top: 330px;
       margin-left: 100px;
     }
 
@@ -112,12 +112,6 @@
        background-color: #004b4b;
     }
 
-    #warn_msg {
-  
-       margin-top: 280px;
-       margin-left: 100px;
-    }
-
     #action_box {
   
        border: 1px dashed; 
@@ -143,8 +137,6 @@
         <button type="button" class="text_button" onclick="get_help()">Help</button>
         <button type="button" class="text_button" onclick="terminate()">Back to the shadows</button>
    </div>
-  
-   <div id="warn_msg"></div>
   
    <form id="shadow_form">
     
@@ -286,9 +278,25 @@
 
           if (document.forms[0]["new_resS"].value == "") {
 
-               document.getElementById("warn_msg").innerHTML = "You must provide a new resources.assets.resS file!";
-          } 
+	       var warn_msg = document.createElement("div");
+	       warn_msg.innerHTML = "You must provide a new resources.assets.resS file!";
+               Object.assign(warn_msg.style, {marginTop: "30px", marginLeft: "100px" });
+	       warn_msg.id = "resS_warning";
+               
+	       if ( ! document.getElementById("resS_warning") ) {
+
+                  document.getElementById("main_display").insertBefore(warn_msg, document.getElementById("action_box")); 
+
+	       }
+
+          }   
           else {
+
+	       if (document.getElementById("resS_warning")) {
+                  
+                   var warn_msg = document.getElementById("resS_warning");
+		   warn_msg.parentNode.removeChild(warn_msg);
+	       }
 
                send_form();
           }
