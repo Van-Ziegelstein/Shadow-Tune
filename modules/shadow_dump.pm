@@ -54,7 +54,7 @@ sub new {
                                   
 		         Returns => 624000000,
 		         Dragonfall => 1794000000,
-		         "Hong Kong" => 2002710000
+		         "Hong Kong" => 2002600000
                                          
 		   }
                  
