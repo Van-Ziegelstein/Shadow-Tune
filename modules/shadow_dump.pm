@@ -25,7 +25,7 @@ sub new {
                               
 			   "~/.local/share/Steam/steamapps/common/Shadowrun*",
                            "~/.steam/steam/SteamApps/common/Shadowrun*",
-                           "~/{[Ss]team,[Gg]ames,GOG}/{,[Ss]team/,GOG/,[Ss]hadowrun/}Shadowrun*",
+                           "~/{[Ss]team,[Gg]ames,GOG,GOG Games}/{,[Ss]team/,GOG/,[Ss]hadowrun/}Shadowrun*",
                            "~/.wine{,32,64,_steam,_shadowrun}/drive_c/{GOG Games,Program Files{, (x86)}/Steam/steamapps/common}/Shadowrun*"
 
 		               ],                
@@ -132,7 +132,7 @@ sub find_game {
 
             if ($path =~ /Shadowrun\s$self->{edition}/) {
            
-	        $self->{sr_resources} = bsd_glob("$path/*_Data");
+	        $self->{sr_resources} = bsd_glob("$path/{,game/}*_Data");
                 last PATH_TRIAL;
                 
             }
