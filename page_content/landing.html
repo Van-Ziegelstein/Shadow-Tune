@@ -253,24 +253,52 @@
           return query_string.slice(0, -1);    
      }
 
-     function send_form () {
+     function create_msg(id, msg) {
+
+          var info_msg = document.createElement("div");
+          Object.assign(info_msg.style, {marginTop: "30px", marginLeft: "100px" });
+	  info_msg.id = id;
+	  if (msg) { info_msg.innerHTML = msg; }
+          
+	  if ( ! document.getElementById(id) ) {
+
+             document.getElementById("main_display").insertBefore(info_msg, document.getElementById("action_box")); 
+
+	  }
+
+     }
+
+     function remove_msg(id) {
+
+          var info_msg = document.getElementById(id);
+          if (info_msg) { info_msg.parentNode.removeChild(info_msg); }
+
+     }
+
+     function send_form() {
 
           var xhreq = new XMLHttpRequest();
 	  var query = create_query(document.getElementById("shadow_form"));
+	  create_msg("progress");
+
 
           xhreq.addEventListener("load", function(event) {
+	       document.getElementById("progress").innerHTML = "Operation completed.";
                toggle_box();
                document.getElementById("action_box").innerHTML= this.responseText;
           });
 
           xhreq.addEventListener("error", function(event) {
-               alert('Oops! Something went wrong.');
+	       document.getElementById("progress").innerHTML = "There was an error while communicating with the server.";
+
           });
 
 
           xhreq.open("POST", "/", true);
 	  xhreq.setRequestHeader("Content-type","application/x-www-form-urlencoded");
           xhreq.send(query);
+          document.getElementById("progress").innerHTML = "Working on the game files...";
+
      } 
 
      document.getElementById("shadow_form").addEventListener("submit", function (event) {
@@ -278,27 +306,14 @@
 
           if (document.forms[0]["new_resS"].value == "") {
 
-	       var warn_msg = document.createElement("div");
-	       warn_msg.innerHTML = "You must provide a new resources.assets.resS file!";
-               Object.assign(warn_msg.style, {marginTop: "30px", marginLeft: "100px" });
-	       warn_msg.id = "resS_warning";
-               
-	       if ( ! document.getElementById("resS_warning") ) {
-
-                  document.getElementById("main_display").insertBefore(warn_msg, document.getElementById("action_box")); 
-
-	       }
+	     create_msg("resS_warning", "You must provide a new resources.assets.resS file!");
 
           }   
           else {
 
-	       if (document.getElementById("resS_warning")) {
-                  
-                   var warn_msg = document.getElementById("resS_warning");
-		   warn_msg.parentNode.removeChild(warn_msg);
-	       }
-
+	       remove_msg("resS_warning");
                send_form();
+
           }
      })
   </script>
