@@ -23,7 +23,7 @@ sub find_game_resources {
 
             if ($path =~ /Shadowrun\s$op_params->{edition}/) {
            
-	        $sr_resources = bsd_glob("$path/*_Data");
+	        $sr_resources = bsd_glob("$path/{,game/}*_Data");
                 last PATH_TRIAL;
                 
             }
@@ -250,14 +250,14 @@ if ( @ARGV != 0) {
                               
 			 "~/.local/share/Steam/steamapps/common/Shadowrun*",
                          "~/.steam/steam/SteamApps/common/Shadowrun*",
-                         "~/{[Ss]team,[Gg]ames,GOG}/{,[Ss]team/,GOG/,[Ss]hadowrun/}Shadowrun*",
+                         "~/{[Ss]team,[Gg]ames,GOG,GOG Games}/{,[Ss]team/,GOG/,[Ss]hadowrun/}Shadowrun*",
                          "~/.wine{,32,64,_steam,_shadowrun}/drive_c/{GOG Games,Program Files{, (x86)}/Steam/steamapps/common}/Shadowrun*"
 
 		            ],                
 
                    MSWin32 => [
                                                  
-	                 "c:/Program Files{, (x86)}/{,Steam/steamapps/common/}Shadowrun*",
+	                 "c:/Program Files{, (x86)}/{,Steam/steamapps/common/,GOG Galaxy/Games/}Shadowrun*",
 		         "c:/GOG Games/Shadowrun*"
  
 		              ],
