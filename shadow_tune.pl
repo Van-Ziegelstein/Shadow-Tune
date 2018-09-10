@@ -69,7 +69,9 @@ sub server_setup {
 
         elsif ($tagged_params{method} eq "GET") {  
                    
-              if ($tagged_params{url_path} eq "/help") { serv_respond($cl_sock, "HTTP/1.1 200 OK", help_screen()); }
+              if ($tagged_params{url_path} eq "/") { serv_respond($cl_sock, "HTTP/1.1 200 OK", fetch_page($session_key)); }
+
+              elsif ($tagged_params{url_path} eq "/help") { serv_respond($cl_sock, "HTTP/1.1 200 OK", help_screen()); }
 
               elsif ($tagged_params{url_path} eq "/$session_key") { 
 	     
@@ -78,9 +80,8 @@ sub server_setup {
 	            last;
 	      }
 
-	      #Catch-all rule to return the page for every GET query
-	      #not corresponding to the help or termination request.
-              else { serv_respond($cl_sock, "HTTP/1.1 200 OK", fetch_page($session_key)); }
+	      #Redirect all other GET queries to the home page.
+              else { serv_respond($cl_sock, "HTTP/1.1 301 Moved Permanently\nLocation: /"); }
 
         }
        
