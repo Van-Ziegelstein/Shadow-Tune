@@ -1,6 +1,11 @@
 # Shadow-Tune
 Perl script to swap out the soundtrack of Harebrained Scheme's Shadowrun games with custom music. 
 
+**Important:**
+
+This is the experimental gui version. It uses a local server and a browser-based interface (if an html form
+can already be called such) to hide the nasty commandline stuff. Development is still under way.
+
 [Prerequisites](#prerequisites)
 
 [Installation](#installation)
@@ -32,10 +37,6 @@ update the aforementioned metadata.
 up to the user to provide a properly formatted `resources.assets.resS` file. (More information on how to create
 a custom version of this file can be found in the [wiki](https://github.com/Van-Ziegelstein/Shadow-Tune/wiki/FAQ)!)
 
-**Important:**
-
-This is the experimental gui version. It uses a local server and a browser-based interface (if an html form
-can already be called such) to hide the nasty commandline stuff. Development is still under way.
 
 ## Why does this exist?
 *Shadow-Tune* `1.0` was originally developed as part of the effort to bring the UGC campaign [CalFree in Chains](https://steamcommunity.com/sharedfiles/filedetails/?id=1239356669)
@@ -114,6 +115,10 @@ as this might mangle a response from the server.
 it after the sound modding**. Otherwise the server will continue to run in the background and wait for
 user input.
 
+### Other points of note
+The script keeps a logfile in the current working directory. This is intended for debugging purposes and refreshed on every
+session.
+
 ## Screenshots
 
 | The browser interface | Replacing the soundtrack of Shadowrun Hong Kong in a Windows 10 VM | 
@@ -142,7 +147,8 @@ constant otherwise the game will most certainly crash when loading nonexistent m
   reload should not be re-initiated. However, the program's "server" is by no means a complete implementation and this leads to
   some peculiar behavior. First off, do not try to throw a webbot at this thing. 
   Nothing outside of `GET` and `POST`requests is implemented and even those are only **partially** handled. In particular, 
-  any `GET` query for something other than the document root will result in the main page being returned (and thus reloaded). 
+  any `GET` query for something other than the document root will be redirected to the main page (potentially triggering a
+  reload). 
   This is a more notable issue than originally anticipated, as the browser will often query a set of standard files that it 
   expects to reside on a normal "server". This may lead to a situation where the parser of the game files returns its log to the 
   browser, only to be immediately followed by a page reload in a subsequent connection. In such a case, the user might never see 
