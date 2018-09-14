@@ -3,8 +3,8 @@ Perl script to swap out the soundtrack of Harebrained Scheme's Shadowrun games w
 
 **Important:**
 
-This is the experimental gui version. It uses a local server and a browser-based interface (if an html form
-can already be called such) to hide the nasty commandline stuff. Development is still under way.
+This is the experimental gui version. It uses a local server and a browser-based interface (if a html form
+can already be called such) to hide the nasty commandline stuff.
 
 [Prerequisites](#prerequisites)
 
@@ -51,18 +51,19 @@ Shadowrunners unite! (Or maybe it would be wiser to flee?)
 - A Perl interpreter, preferably `>= 5.26.2`.
 Most Linux and Unix flavors should come with one pre-installed. Windows users might want to give [Strawberry Perl](http://strawberryperl.com/) or [ActivePerl](https://www.activestate.com/activeperl) a try. (**Note: Only Strawberry Perl has been tested so far. See [Limitations](#limitations) for further information.**)
 
+- A browser.
+
 ## Installation
-There are no releases yet. If you really want to try this out, then clone the repo. Stability is not guaranteed!
+Download the beta from the [Release](https://github.com/Van-Ziegelstein/Shadow-Tune/releases) page or clone the repo. After unzipping, you should have some files and various folders at the extraction location. (Don't change anything about their hierarchy.)
 
 ## Launching
 
 ### Linux and Mac
-The main script is named "shadow_tune.pl". Depending on the desktop environment, launching it with a simple click might be
-possible. If that's not an option, you'll need to swallow the bitter pill and
-open a terminal.
+The main script is named "shadow_tune.pl". Depending on the desktop environment, launching it with a simple click might be possible. If that's not an option, you'll need to swallow the bitter pill and
+open a terminal. (Don't forget to make the script executable.)
 
 ### Windows
-The source files contain a batch script. After unzipping, navigate to the "windows" folder
+The source files contain a batch script. Navigate to the "windows" folder
 and double-click the file (Windows will question its safety and given the twisted mind of 
 *Shadow-Tune*'s maintainer it is probably right). 
 The script will check for a Perl interpreter and launch the main program afterwards.
@@ -139,7 +140,7 @@ constant otherwise the game will most certainly crash when loading nonexistent m
 
 - *Shadow-Tune* was originally developed in and for a Unix-like environment. This still holds true for the gui branch as well. Nevertheless, the "usability" on Windows has been improved with the inclusion of a batch script. In the best case scenario program launch should now be a standard click and forget action. 
 
-- A html form? Seriously? Admittedly, a browser-based user interface is not the first solution that comes to mind when thinking about a good gui. The reason for choosing this approach is that *Shadow-Tune* still aims at introducing as few dependencies as possible. There are solid gui frameworks for Perl but those would require the user to install additional packages. On the other hand, every OS comes with a browser. The operations *Shadow-Tune* is designed to carry out are still simple enough for a html form to suffice (at least I hope so). On a more historical note, Perl has its roots in web scripting anyway and graphical interfaces never were among the areas where it truly shone.
+- A html form? Seriously? Admittedly, a browser-based user interface is not the first solution that comes to mind when thinking about a good gui. The reason for choosing this approach is that *Shadow-Tune* still aims at introducing as few dependencies as possible. There are solid gui frameworks for Perl, but those would require the user to install additional packages. On the other hand, every OS comes with a browser. The operations *Shadow-Tune* is designed to carry out are still simple enough for a html form to suffice (at least I hope so). On a more historical note, Perl has its roots in web scripting anyway and graphical interfaces never were among the areas where it truly shone.
 
 - Known issues so far: 
 
@@ -160,7 +161,7 @@ constant otherwise the game will most certainly crash when loading nonexistent m
   * This ties into the decision of not implementing persistent HTTP connections. Right now the server will close the connection
   after every response. This is of course more primitive than the modern HTTP standard demands, but it was deemed adequate for 
   the small-scale transmissions that *Shadow-Tune* is going to produce over the course of a session (or at least the original
-  reasoning went somewhat along those lines.) Implementing true keep-alive connections would introduce more complexity into the 
+  reasoning went somewhat along those lines). Implementing true keep-alive connections would introduce more complexity into the 
   code and it is thus still "under consideration". However, going the simpler route seems to have introduced problems as well. 
   Requests with apparently empty content have been observed after closing a connection, and with reference to the "phenomenon" 
   described above, it could be that certain browsers react with a reload request to such an event.
