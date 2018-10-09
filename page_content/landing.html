@@ -221,7 +221,7 @@
           
 	           var text_area = document.getElementById("main_display");
                    
-		   Object.assign(text_area.style, {position: "absolute", top: "50%", left: "50%", transform: "translateX(-50%) translateY(-50%)"});
+		   text_area.setAttribute("style","position: absolute; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%);");
                    text_area.innerHTML = this.responseText;
                
           });
@@ -256,7 +256,7 @@
      function create_msg(id, msg) {
 
           var info_msg = document.createElement("div");
-          Object.assign(info_msg.style, {marginTop: "30px", marginLeft: "100px" });
+          info_msg.setAttribute("style", "margin-top: 30px; margin-left: 100px;");
 	  info_msg.id = id;
 	  if (msg) { info_msg.innerHTML = msg; }
           
