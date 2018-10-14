@@ -1,5 +1,5 @@
 # Shadow-Tune
-Perl script to swap out the soundtrack of Harebrained Scheme's Shadowrun games with custom music. 
+Perl script to swap out the soundtrack of Harebrained Schemes' Shadowrun games with custom music. 
 
 [Prerequisites](#prerequisites)
 
