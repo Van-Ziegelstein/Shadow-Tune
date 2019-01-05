@@ -165,13 +165,13 @@ sub __asset_dump {
 
 	   print "\n$1\n", "-"x45, "\nSize: $tracksize\n",
 	   "Size data offset: $size_offset\nTrack resS offset: $resS_offset\n" 
-	   if $self->{verbose} == 1;
+	   if $self->{verbose};
 	   
 	   push(@track_list, {"name" => $1, "size_offset" => $size_offset, "size" => $tracksize, "track_offset" => $resS_offset});
 
     }
     
-    print "\n" if $self->{verbose} == 1;
+    print "\n" if $self->{verbose};
     return @track_list;
 }
 
@@ -184,16 +184,16 @@ sub __resS_dump {
     my @offset_list;
 
     print "Parsed resources.assets.resS replacement file :)\n";
-    print "\n" if $self->{verbose} == 1;
+    print "\n" if $self->{verbose};
 
     while ($resS_content =~ /$ogg_first_page/g) {
 
-	 print "Track ", ++$track_num, " offset: $-[0]\n" if $self->{verbose} == 1;
+	 print "Track ", ++$track_num, " offset: $-[0]\n" if $self->{verbose};
          push(@offset_list, $-[0]);
 
     }
 
-    print "\n" if $self->{verbose} == 1;
+    print "\n" if $self->{verbose};
     return @offset_list;
 }
 
@@ -220,14 +220,14 @@ sub __asset_update {
 
        print "\n$track->{qq/name/}\n", "-"x45, "\nNew size: $track->{qq/size/}\n",
        "New resS offset: $track->{qq/track_offset/}\n" 
-       if $self->{verbose} == 1;
+       if $self->{verbose};
        
        seek($assets_file, $track->{"size_offset"}, SEEK_SET);
        print $assets_file pack("VV", $track->{"size"}, $track->{"track_offset"}); 
 
    }
 
-   print "\n" if $self->{verbose} == 1;
+   print "\n" if $self->{verbose};
 
 }
 
